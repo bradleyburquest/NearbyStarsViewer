@@ -37,6 +37,8 @@ Camera zoom changes perspective. The distance cutoff independently controls whic
 
 Use a **Sun / Earth** segmented control, default Sun. Preserve compatible settings on switch and echo the origin in status/accessibility text. Earth mode is a viewpoint transformation, not a stationary-Earth claim.
 
+Phase 5 uses Earth's fixed J2000 vernal-equinox heliocentric position (+X, 1 AU). The resulting translation is mathematically applied but visually negligible at parsec overview scale; the interface discloses this rather than exaggerating it.
+
 Search common names and catalog IDs. Results show name, ID, spectral class, and distance; support keyboard navigation; and select the chosen system.
 
 ### Fullscreen
@@ -52,6 +54,8 @@ Use the Fullscreen API. If unavailable or denied, maximize within the viewport a
 - Allow light-year/parsec display conversion without changing the underlying filter.
 
 ### Reference layers
+
+The Phase 5 constellation overlay contains simplified educational line figures for Orion, Ursa Major, and Cassiopeia. These are orientation aids rather than IAU constellation boundaries.
 
 Independently toggle major constellation lines/labels, galactic plane, equatorial grid, ecliptic, and galactic grid. Background layers expose 0–100% opacity; defaults remain subordinate to stars.
 
@@ -101,6 +105,8 @@ Show lightweight catalog/asset progress and disable only unavailable controls. G
 - Announce selection, origin, count, and errors through a polite live region.
 
 ## 9. Persistence and visual direction
+
+Phase 6 provides a non-blocking help dialog, keyboard shortcut reference, skip navigation, polite state announcements, and locally persisted validated display preferences. Shareable URL state takes precedence over saved preferences.
 
 Persist non-sensitive origin, units, layers, opacity, label mode, and effect preferences. Validate/version saved and shareable URL state; never restore an invalid camera. Use a dismissible first-use hint, not a blocking tour.
 

@@ -39,6 +39,8 @@ Ordinary use requires no catalog API. This improves reproducibility, privacy, an
 
 Offline scripts ingest approved sources, normalize identifiers/units, select the 150 closest qualifying systems, validate them, and emit a compact artifact plus provenance and validation report. Rank by the best documented distance estimate, prefer measured parallax-derived values, model top-level records as systems, resolve cross-catalog duplicates, and pin source/transformation versions.
 
+Phase 7 adds a dated NASA Exoplanet Archive PSCompPars snapshot. Host cross-matching requires agreement in both sky position and distance; explicit component-to-system mappings are retained with the component host name. Composite host properties are applied only to single-star top-level systems.
+
 ### Domain model
 
 Typed immutable models describe systems, components, exoplanets, measurements, provenance, frames, epochs, and units, with no renderer types. Missing and uncertain measurements are explicit rather than zero or magic values.
@@ -53,7 +55,7 @@ Typed immutable models describe systems, components, exoplanets, measurements, p
 
 Use ICRS with a documented source epoch as the canonical representation. Scene space may use parsecs; presentation supports parsecs and light-years. Document axes and handedness.
 
-Earth mode subtracts Earth's position under the selected model. A documented fixed epoch is acceptable initially; do not imply real-time ephemeris precision unless implemented.
+Earth mode subtracts a fixed J2000 Earth position of one astronomical unit along the ICRS +X direction, corresponding to a documented vernal-equinox model. This deterministic model is not a real-time ephemeris and is intentionally not exaggerated at parsec overview scale.
 
 ### Application state
 
@@ -67,6 +69,8 @@ Actions enforce ranges and visibility invariants. Persistence and URL decoding a
 ### Scene adapter
 
 Accept domain-derived view models, not raw records. Own camera/orbit controls, instanced markers and picking, labels/highlight, motion vectors, reference layers, lifecycle, resize, and pixel-ratio limits. Use demand rendering where feasible and dispose GPU resources.
+
+Phase 5 reference geometry is generated locally as disposable Three.js objects. Proper-motion arrows use the ICRS tangent direction from the catalog's RA and declination components; logarithmically bounded length encodes relative angular rate, not traveled distance or complete space velocity.
 
 ### UI and accessible catalog
 
@@ -94,6 +98,7 @@ Validation rejects duplicate IDs, non-finite values, RA outside `[0, 360)`, decl
 - Target 60 fps on a representative laptop and usable 30 fps on the mobile baseline.
 - Transform expensive data offline or once at load.
 - Establish measured bundle/load/frame budgets after the first vertical slice.
+- Phase 6 splits the semantic application shell from the Three.js scene. Production chunks remain below a 600 kB minified warning budget and approximately 150 kB each when gzip-compressed.
 - Use WebGL 2 where available with a readable fallback.
 - Feature-detect Pointer Events, ResizeObserver, and Fullscreen API.
 - Test stable Chrome, Firefox, Safari, and relevant mobile engines; smoke-test DuckDuckGo.
@@ -103,6 +108,10 @@ Validation rejects duplicate IDs, non-finite values, RA outside `[0, 360)`, decl
 The initial release requires no account and collects no personal data. Avoid analytics by default. Use a suitable Content Security Policy, pin dependencies, treat catalog text as untrusted, and never ship credentials.
 
 Produce a static build for GitHub Pages, Cloudflare Pages, Netlify, or equivalent. Support non-root base paths, content hashes, and explicit versioned-catalog caching. Expose app/catalog version and graphics capability in diagnostics.
+
+Phase 8 adds a browser CSP and referrer policy, separate application and scene error boundaries, runtime renderer diagnostics, a production-only dependency audit command, automated accessibility scans, and an Apache deployment verifier. Recommended Apache response headers and hashed-asset caching are documented in `APACHE_DEPLOYMENT.md`.
+
+Automated accessibility scans exclude only the CSS2D spatial-label layer because labels can overlap by their astronomical projection and duplicate the fully audited semantic catalog buttons. Selection remains available through that catalog when a marker label is too crowded to use.
 
 ## 9. Testing
 

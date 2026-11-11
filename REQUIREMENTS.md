@@ -123,6 +123,8 @@ Invalid catalog/state fails safely; optional-overlay failures do not block explo
 10. Chrome, Firefox, Safari/WebKit, and available DuckDuckGo checks pass.
 11. No critical automated or manual keyboard accessibility violations remain.
 
+Phase 8 automates WCAG A/AA scanning in Chromium and WebKit, verifies the deployed index and hashed assets, and checks production dependencies separately from development tooling.
+
 ## 7. Out of scope initially
 
 - Spacecraft-grade real-time ephemerides or relativistic simulation
@@ -133,9 +135,10 @@ Invalid catalog/state fails safely; optional-overlay failures do not block explo
 
 ## 8. Open decisions
 
-- Source releases/licenses for positions, distances, properties, and exoplanets
+- CNS5 and NASA Exoplanet Archive PSCompPars are selected for Phase 7; broader non-host stellar-property sources remain open.
 - Tie-breaking and uncertainty policy at the 150th system
-- Earth-origin epoch/ephemeris model
-- Redistributable constellation figure dataset
+- A future phase may replace the Phase 5 fixed J2000 Earth-origin model with a dated ephemeris.
+- A future phase may replace the locally authored simplified constellation figures with a redistributable comprehensive figure dataset.
 - Performance baseline devices and measured budgets
+- A representative-laptop frame-time benchmark remains desirable; Phase 6 establishes a 600 kB minified per-chunk build budget and Chromium/WebKit browser gates.
 

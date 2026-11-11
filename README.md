@@ -1,43 +1,60 @@
 # NearbyStarsViewer
 
-NearbyStarsViewer is a planned browser-based 3D explorer for the 150 stellar systems closest to the Sun. Users will navigate the local stellar neighborhood, switch between Sun- and Earth-centered views, inspect astronomical data, filter by distance, and enable constellation and coordinate reference layers.
+NearbyStarsViewer is a browser-based 3D explorer for the 150 stellar systems closest to the Sun. Users can navigate the local stellar neighborhood, search catalog names and identifiers, filter by distance, and inspect astrometry and photometry.
 
 ## Project status
 
-The project is in the specification and architecture phase. Application code and the production stellar catalog have not yet been implemented.
-
-## Planned capabilities
-
-- Interactive 3D orbit and camera zoom
-- Sun-centered and Earth-centered origins
-- Searchable details for coordinates, classification, magnitudes, physical properties, motion, components, and confirmed exoplanets
-- Independent constellation, galactic-plane, equatorial-grid, ecliptic, and galactic-grid controls
-- Distance filtering and proper-motion vectors
-- Responsive, fullscreen, keyboard, touch, and accessible catalog experiences
-- Current Chrome, Firefox, Safari, and standards-compatible DuckDuckGo browsers
+Phase 8 is complete. The application adds isolated application/viewer error recovery, runtime WebGL diagnostics, a restrictive browser Content Security Policy, production dependency auditing, automated WCAG A/AA checks, an Apache deployment verifier, and documented Apache security/cache headers. Phase 7's validated CNS5 and NASA Exoplanet Archive scientific catalog remains unchanged.
 
 ## Documentation
 
-- [Requirements](REQUIREMENTS.md) — scope, assumptions, and acceptance criteria
-- [UI specification](UI_SPEC.md) — layout, interactions, visual behavior, and accessibility
-- [Architecture](ARCHITECTURE.md) — stack, modules, data flow, and quality strategy
-- [Agent guide](AGENTS.md) — conventions and checks for contributors and coding agents
-- [Original brief](NSV_requirements.md) — source request retained for provenance
-
-The normalized documents are the working source of truth. The original brief remains unchanged.
-
-## Proposed implementation
-
-The architecture recommends a static TypeScript application using Vite, React, and Three.js, with a reproducible offline catalog pipeline and no required runtime backend. Validate these choices with a thin vertical prototype before broad implementation.
+- [Requirements](REQUIREMENTS.md)
+- [UI specification](UI_SPEC.md)
+- [Architecture](ARCHITECTURE.md)
+- [Agent guide](AGENTS.md)
+- [Data sources](DATA_SOURCES.md)
+- [Apache deployment](APACHE_DEPLOYMENT.md)
+- [Original brief](NSV_requirements.md)
 
 ## Getting started
 
-There are no install or run commands yet. Once the application scaffold exists, add verified prerequisites, install, development, test, build, and deployment commands here.
+Prerequisite: Node.js 24 or a compatible supported release.
+
+```powershell
+npm install
+npm run dev
+```
+
+Open `http://127.0.0.1:5173`, or run `npm run build` and serve `dist` through the configured Apache `nearbystars.local` virtual host.
+
+Run the complete non-browser quality gate:
+
+```powershell
+npm run check
+```
+
+Refresh the catalog from the GAVO CNS5 TAP service, then validate it:
+
+```powershell
+$env:NODE_USE_SYSTEM_CA='1'
+npm run catalog:refresh
+npm run validate:data
+```
+
+Run browser tests (Firefox is intentionally omitted on this workstation):
+
+```powershell
+npx playwright install chromium webkit
+npm run test:e2e
+```
+
+Audit production dependencies and verify the Apache deployment:
+
+```powershell
+npm run audit:prod
+npm run verify:apache
+```
 
 ## Data and attribution
 
-Astronomical sources have not yet been selected. Before committing catalog data, record each source’s release, license, retrieval date, coordinate frame, epoch, units, transformations, and required attribution. See `ARCHITECTURE.md` and `REQUIREMENTS.md`.
-
-## Contributing
-
-Read `AGENTS.md` before changing the project. Keep requirements, UI behavior, architecture, and README instructions synchronized with implementation.
+The bundled catalog is derived from the Fifth Catalogue of Nearby Stars (CNS5), distributed by the German Astrophysical Virtual Observatory under CC BY 4.0. Distances are derived from catalog parallaxes. See [DATA_SOURCES.md](DATA_SOURCES.md) for selection policy, provenance, query details, and attribution.
