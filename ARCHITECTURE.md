@@ -55,6 +55,8 @@ Typed immutable models describe systems, components, exoplanets, measurements, p
 
 Use ICRS with a documented source epoch as the canonical representation. Scene space may use parsecs; presentation supports parsecs and light-years. Document axes and handedness.
 
+Constellation membership propagates catalog ICRS coordinates linearly to J2000 using proper motion, then applies the official IAU boundary lookup provided by Astronomy Engine. The separately rendered BSD-licensed Celestial Data figures cover all 88 constellations and must not be described as official boundaries.
+
 Earth mode subtracts a fixed J2000 Earth position of one astronomical unit along the ICRS +X direction, corresponding to a documented vernal-equinox model. This deterministic model is not a real-time ephemeris and is intentionally not exaggerated at parsec overview scale.
 
 ### Application state

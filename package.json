@@ -1,7 +1,7 @@
 {
   "name": "nearby-stars-viewer",
   "private": true,
-  "version": "0.8.0",
+  "version": "0.8.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -20,9 +20,11 @@
     "verify:apache": "tsx scripts/verify-deployment.ts",
     "validate:data": "tsx scripts/validate-catalog.ts",
     "catalog:refresh": "tsx scripts/fetch-cns5.ts && prettier --write src/data/nearby-stars-catalog.json",
+    "constellations:refresh": "tsx scripts/fetch-constellations.ts && prettier --write src/data/constellation-lines.json",
     "check": "npm run format:check && npm run lint && npm run typecheck && npm run validate:data && npm run test && npm run build"
   },
   "dependencies": {
+    "astronomy-engine": "^2.1.19",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "three": "^0.187.0",

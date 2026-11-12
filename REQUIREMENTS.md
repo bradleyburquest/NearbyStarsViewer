@@ -65,6 +65,8 @@ Astronomy enthusiasts, students, educators, and casual learners can understand t
 ### FR-7 Reference layers
 
 - Independently toggle constellation figures/labels, galactic plane, equatorial grid, ecliptic, and galactic grid.
+- Layer visibility and opacity changes shall not recreate or reset the camera, orbit target, or selected system.
+- A selected spatial star label shall expand with light-year distance, spectral classification, constellation, equatorial coordinates, and apparent magnitude.
 - Adjust constellation and galactic-plane intensity.
 - Identify relevant frames/epochs and keep defaults visually subordinate.
 
@@ -138,7 +140,7 @@ Phase 8 automates WCAG A/AA scanning in Chromium and WebKit, verifies the deploy
 - CNS5 and NASA Exoplanet Archive PSCompPars are selected for Phase 7; broader non-host stellar-property sources remain open.
 - Tie-breaking and uncertainty policy at the 150th system
 - A future phase may replace the Phase 5 fixed J2000 Earth-origin model with a dated ephemeris.
-- A future phase may replace the locally authored simplified constellation figures with a redistributable comprehensive figure dataset.
+- Phase 8.1 uses the BSD-licensed Celestial Data collection for comprehensive constellation figures and Astronomy Engine for IAU boundary membership.
 - Performance baseline devices and measured budgets
 - A representative-laptop frame-time benchmark remains desirable; Phase 6 establishes a 600 kB minified per-chunk build budget and Chromium/WebKit browser gates.
 

@@ -16,9 +16,13 @@ Always communicate the active origin, distance cutoff, visible reference layers,
 - **Right panel:** selected-system details; closed until selection and collapsible.
 - **Status strip:** scale, visible/total count, frame/epoch, loading messages, attribution.
 
+The left catalog/control panel and right selected-system panel scroll independently when their content exceeds the available desktop viewport height.
+
+Every Selected System data-section heading includes contextual help. Hover or keyboard focus shows its tooltip; click or tap pins it until the heading is activated again. Triggers expose their expanded state and tooltip relationship to assistive technology.
+
 ### Narrow screens
 
-Use a compact top bar over a full-viewport scene and mutually exclusive bottom sheets for controls/details. Touch targets are at least 44 by 44 CSS px. No operation requires hover.
+Use a compact top bar over a full-viewport scene and mutually exclusive bottom sheets for controls/details. The document provides primary scrolling; a bounded details sheet scrolls internally when needed. Touch targets are at least 44 by 44 CSS px. No operation requires hover.
 
 ## 3. Viewport interaction
 
@@ -39,7 +43,7 @@ Use a **Sun / Earth** segmented control, default Sun. Preserve compatible settin
 
 Phase 5 uses Earth's fixed J2000 vernal-equinox heliocentric position (+X, 1 AU). The resulting translation is mathematically applied but visually negligible at parsec overview scale; the interface discloses this rather than exaggerating it.
 
-Search common names and catalog IDs. Results show name, ID, spectral class, and distance; support keyboard navigation; and select the chosen system.
+Search common names, catalog IDs, full constellation names, and official constellation abbreviations. Results show name and distance, support keyboard navigation, and select the chosen system.
 
 ### Fullscreen
 
@@ -55,13 +59,13 @@ Use the Fullscreen API. If unavailable or denied, maximize within the viewport a
 
 ### Reference layers
 
-The Phase 5 constellation overlay contains simplified educational line figures for Orion, Ursa Major, and Cassiopeia. These are orientation aids rather than IAU constellation boundaries.
+The constellation overlay contains J2000 line figures for all 88 IAU constellations, with subdued labels for major figures. These are orientation aids rather than official IAU boundaries. System details separately show authoritative IAU boundary membership for the system's Earth-sky direction.
 
-Independently toggle major constellation lines/labels, galactic plane, equatorial grid, ecliptic, and galactic grid. Background layers expose 0–100% opacity; defaults remain subordinate to stars.
+Independently toggle all constellation lines/labels, galactic plane, equatorial grid, ecliptic, and galactic grid. Toggling a layer or changing its opacity updates the existing scene in place and must preserve the camera, orbit target, and selection. Background layers expose 0–100% opacity; defaults remain subordinate to stars.
 
 ### Star display
 
-Offer labels (none, selected, prominent), proper-motion vectors (default off), apparent-brightness versus clarity modes, and spectral-class color with a legend.
+Offer labels (none, selected, prominent), proper-motion vectors (default off), apparent-brightness versus clarity modes, and spectral-class color with a legend. Selecting a star label opens an anchored dropdown below the stationary name with distance in light-years, spectral classification, constellation, right ascension and declination, and apparent Gaia G magnitude. Apparent magnitude is explicitly identified as Earth-observed brightness, with lower values being brighter; absolute magnitude is not shown in this compact UI. Clicking outside the label collapses the dropdown without clearing the selected system.
 
 ## 5. Star representation
 

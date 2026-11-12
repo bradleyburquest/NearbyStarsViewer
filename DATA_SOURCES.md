@@ -15,10 +15,11 @@ Run:
 ```powershell
 $env:NODE_USE_SYSTEM_CA='1'
 npm run catalog:refresh
+npm run constellations:refresh
 npm run validate:data
 ```
 
-`scripts/fetch-cns5.ts` contains the exact ADQL selections, cross-match rules, and field mappings. It generates `src/data/nearby-stars-catalog.json`; application startup validates that artifact against schema 3.0.0. The generated records retain CNS5, GJ, HIP, and Gaia DR3 identifiers when available, per-record epochs and bibliographic codes, astrometry, Gaia G/G−RP photometry, multiplicity, radial velocity, derived absolute magnitude, and the confirmed-planet snapshot.
+`scripts/fetch-cns5.ts` contains the exact ADQL selections, cross-match rules, and field mappings. It generates `src/data/nearby-stars-catalog.json`; application startup validates that artifact against schema 4.0.0. The generated records retain CNS5, GJ, HIP, and Gaia DR3 identifiers when available, per-record epochs and bibliographic codes, astrometry, Gaia G/G−RP photometry, multiplicity, radial velocity, derived absolute magnitude, constellation membership, and the confirmed-planet snapshot.
 
 ## Confirmed exoplanets and host properties
 
@@ -39,6 +40,12 @@ z = d sin(dec)
 ```
 
 The Cartesian convention is right-handed: +X points to RA 0°, +Y to RA 90°, and +Z to Dec +90°. Direct inverse parallax is suitable for this nearby, high signal-to-noise catalog, but remains explicitly marked as a project-derived value.
+
+## Constellation membership and figures
+
+Each system's constellation membership is calculated against the 88 official IAU sky regions using Astronomy Engine's boundary lookup. Catalog coordinates and proper motion are propagated linearly to J2000 before lookup. Membership describes the direction in which the system appears from Earth; it does not imply physical association with the distant stars in the constellation figure.
+
+The background line figures come from the [Celestial Data constellation-lines collection](https://dieghernan.github.io/celestial_data/datasets/constellations.lines/), derived from d3-celestial and distributed under BSD 3-Clause. The 89 GeoJSON features cover all 88 IAU constellations in J2000 coordinates; Serpens is represented by two features. Collection DOI: [10.5281/zenodo.7561601](https://doi.org/10.5281/zenodo.7561601). These lines are illustrative figures, not official IAU boundaries. See `THIRD_PARTY_NOTICES.md`.
 
 Common display names are a small maintained mapping keyed by stable CNS5 identifiers. Catalog aliases remain searchable. Estimated marker colors use spectral type when present and Gaia G−RP otherwise; they are visualization aids, not calibrated rendered colors.
 

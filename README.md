@@ -4,7 +4,9 @@ NearbyStarsViewer is a browser-based 3D explorer for the 150 stellar systems clo
 
 ## Project status
 
-Phase 8 is complete. The application adds isolated application/viewer error recovery, runtime WebGL diagnostics, a restrictive browser Content Security Policy, production dependency auditing, automated WCAG A/AA checks, an Apache deployment verifier, and documented Apache security/cache headers. Phase 7's validated CNS5 and NASA Exoplanet Archive scientific catalog remains unchanged.
+Phase 8 is complete. The application adds isolated application/viewer error recovery, runtime WebGL diagnostics, a restrictive browser Content Security Policy, production dependency auditing, automated WCAG A/AA checks, an Apache deployment verifier, and documented Apache security/cache headers. Phase 7's validated CNS5 and NASA Exoplanet Archive scientific data remains intact.
+
+The constellation layer now draws line figures for all 88 IAU constellations from the BSD-licensed Celestial Data collection. Every nearby system also displays its official Earth-sky IAU constellation name and abbreviation, calculated at J2000 from its astrometry and proper motion.
 
 ## Documentation
 
@@ -14,6 +16,7 @@ Phase 8 is complete. The application adds isolated application/viewer error reco
 - [Agent guide](AGENTS.md)
 - [Data sources](DATA_SOURCES.md)
 - [Apache deployment](APACHE_DEPLOYMENT.md)
+- [Third-party notices](THIRD_PARTY_NOTICES.md)
 - [Original brief](NSV_requirements.md)
 
 ## Getting started
