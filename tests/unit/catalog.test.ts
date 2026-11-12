@@ -15,6 +15,10 @@ describe('CNS5 catalog', () => {
     expect(
       nearbyStarsCatalog.systems.filter((system) => system.confirmedPlanets.length),
     ).toHaveLength(37);
+    expect(nearbyStarsCatalog.systems[0]?.constellation).toMatchObject({
+      name: 'Centaurus',
+      abbreviation: 'Cen',
+    });
   });
 
   it('rejects duplicate system identifiers', () => {

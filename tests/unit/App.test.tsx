@@ -14,7 +14,7 @@ describe('App', () => {
 
   it('renders Phase 7 scientific details and filters planet hosts', () => {
     render(<App />);
-    expect(screen.getByText('Phase 8 · Production hardened')).toBeInTheDocument();
+    expect(screen.getByText('Phase 8 · 88 constellations')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Help' }));
     expect(screen.getByRole('dialog', { name: 'Viewer help' })).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Close help' }));
@@ -30,6 +30,7 @@ describe('App', () => {
     expect(screen.getByText(/HIP 71683/)).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Exoplanets · 2' })).toBeInTheDocument();
     expect(screen.getByText('Proxima Cen b')).toBeInTheDocument();
+    expect(screen.getByText('Centaurus (Cen)')).toBeInTheDocument();
     fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'Barnard' } });
     expect(screen.getByText('1 of 150 systems shown')).toBeInTheDocument();
   });

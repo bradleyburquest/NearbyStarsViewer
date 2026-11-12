@@ -1,7 +1,7 @@
 {
-  "schemaVersion": "3.0.0",
-  "catalogVersion": "cns5-gavo-2023-09-04-nearest-150-v2-exoplanets",
-  "generatedAt": "2026-11-11T20:51:46.642Z",
+  "schemaVersion": "4.0.0",
+  "catalogVersion": "cns5-gavo-2023-09-04-nearest-150-v3-constellations",
+  "generatedAt": "2026-11-11T21:26:20.850Z",
   "title": "NearbyStarsViewer nearest 150 stellar systems",
   "description": "The 150 nearest distinct stellar systems selected reproducibly from CNS5.",
   "selectionPolicy": "CNS5 rows with trigonometric parallax, retaining single objects and flagged system primaries; sorted by descending parallax and limited to 150 systems.",
@@ -15,6 +15,16 @@
       "retrievedAt": "2026-11-11",
       "license": "CC BY 4.0",
       "acknowledgement": "This research has made use of the Fifth Catalogue of Nearby Stars (Golovin et al. 2023) and the GAVO Data Center."
+    },
+    {
+      "id": "iau-constellation-boundaries",
+      "title": "IAU constellation boundaries via Astronomy Engine",
+      "publisher": "International Astronomical Union / Astronomy Engine",
+      "catalogVersion": "IAU 88-constellation boundary lookup at J2000",
+      "url": "https://www.iau.org/IAU/IAU/Astronomy-FAQs/Constellations.aspx",
+      "retrievedAt": "2026-11-11",
+      "license": "IAU boundary definitions; Astronomy Engine MIT license",
+      "acknowledgement": "Constellation membership uses the 88 official IAU sky regions through Astronomy Engine."
     },
     {
       "id": "derived-absolute-magnitude",
@@ -61,6 +71,12 @@
       "multiplicity": "multiple",
       "componentCount": 3,
       "positionBasis": "primary-component",
+      "constellation": {
+        "name": "Centaurus",
+        "abbreviation": "Cen",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 1991.25,
@@ -170,6 +186,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Ophiuchus",
+        "abbreviation": "Oph",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -307,6 +329,12 @@
       "multiplicity": "multiple",
       "componentCount": 2,
       "positionBasis": "primary-component",
+      "constellation": {
+        "name": "Vela",
+        "abbreviation": "Vel",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2000,
@@ -376,6 +404,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Hydra",
+        "abbreviation": "Hya",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2000,
@@ -445,6 +479,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Leo",
+        "abbreviation": "Leo",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -535,6 +575,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Ursa Major",
+        "abbreviation": "UMa",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -615,6 +661,12 @@
       "multiplicity": "multiple",
       "componentCount": 2,
       "positionBasis": "primary-component",
+      "constellation": {
+        "name": "Canis Major",
+        "abbreviation": "CMa",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 1991.25,
@@ -695,6 +747,12 @@
       "multiplicity": "multiple",
       "componentCount": 2,
       "positionBasis": "primary-component",
+      "constellation": {
+        "name": "Cetus",
+        "abbreviation": "Cet",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -779,6 +837,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Sagittarius",
+        "abbreviation": "Sgr",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -859,6 +923,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Andromeda",
+        "abbreviation": "And",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -949,6 +1019,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Eridanus",
+        "abbreviation": "Eri",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -1059,6 +1135,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Pisces Austrinus",
+        "abbreviation": "PsA",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -1200,6 +1282,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Virgo",
+        "abbreviation": "Vir",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -1304,6 +1392,12 @@
       "multiplicity": "multiple",
       "componentCount": 3,
       "positionBasis": "primary-component",
+      "constellation": {
+        "name": "Aquarius",
+        "abbreviation": "Aqr",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -1373,6 +1467,12 @@
       "multiplicity": "multiple",
       "componentCount": 2,
       "positionBasis": "primary-component",
+      "constellation": {
+        "name": "Cygnus",
+        "abbreviation": "Cyg",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -1457,6 +1557,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Canis Minor",
+        "abbreviation": "CMi",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 1991.25,
@@ -1537,6 +1643,12 @@
       "multiplicity": "multiple",
       "componentCount": 2,
       "positionBasis": "primary-component",
+      "constellation": {
+        "name": "Draco",
+        "abbreviation": "Dra",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -1629,6 +1741,12 @@
       "multiplicity": "multiple",
       "componentCount": 2,
       "positionBasis": "primary-component",
+      "constellation": {
+        "name": "Andromeda",
+        "abbreviation": "And",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -1736,6 +1854,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Cancer",
+        "abbreviation": "Cnc",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -1826,6 +1950,12 @@
       "multiplicity": "multiple",
       "componentCount": 2,
       "positionBasis": "primary-component",
+      "constellation": {
+        "name": "Indus",
+        "abbreviation": "Ind",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -1922,6 +2052,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Cetus",
+        "abbreviation": "Cet",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -2048,6 +2184,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Horologium",
+        "abbreviation": "Hor",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -2174,6 +2316,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Cetus",
+        "abbreviation": "Cet",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -2306,6 +2454,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Canis Minor",
+        "abbreviation": "CMi",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -2386,6 +2540,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Aries",
+        "abbreviation": "Ari",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -2522,6 +2682,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Pictor",
+        "abbreviation": "Pic",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -2630,6 +2796,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Microscopium",
+        "abbreviation": "Mic",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -2714,6 +2886,12 @@
       "multiplicity": "multiple",
       "componentCount": 2,
       "positionBasis": "primary-component",
+      "constellation": {
+        "name": "Cepheus",
+        "abbreviation": "Cep",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 1991.25,
@@ -2794,6 +2972,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Pavo",
+        "abbreviation": "Pav",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -2878,6 +3062,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Antila",
+        "abbreviation": "Ant",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -2962,6 +3152,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Monoceros",
+        "abbreviation": "Mon",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2000,
@@ -3031,6 +3227,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Monoceros",
+        "abbreviation": "Mon",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 1991.25,
@@ -3111,6 +3313,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Ophiuchus",
+        "abbreviation": "Oph",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -3241,6 +3449,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Pisces",
+        "abbreviation": "Psc",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -3321,6 +3535,12 @@
       "multiplicity": "multiple",
       "componentCount": 2,
       "positionBasis": "primary-component",
+      "constellation": {
+        "name": "Virgo",
+        "abbreviation": "Vir",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -3401,6 +3621,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Sculptor",
+        "abbreviation": "Scl",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -3485,6 +3711,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Aries",
+        "abbreviation": "Ari",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -3589,6 +3821,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Draco",
+        "abbreviation": "Dra",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -3704,6 +3942,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Ara",
+        "abbreviation": "Ara",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -3808,6 +4052,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Triangulum Australe",
+        "abbreviation": "TrA",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2000,
@@ -3877,6 +4127,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Sextans",
+        "abbreviation": "Sex",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -3961,6 +4217,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Musca",
+        "abbreviation": "Mus",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -4041,6 +4303,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Cygnus",
+        "abbreviation": "Cyg",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -4125,6 +4393,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Hercules",
+        "abbreviation": "Her",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2000,
@@ -4194,6 +4468,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Aquarius",
+        "abbreviation": "Aqr",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -4331,6 +4611,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Carina",
+        "abbreviation": "Car",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -4411,6 +4697,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Cetus",
+        "abbreviation": "Cet",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -4526,6 +4818,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Eridanus",
+        "abbreviation": "Eri",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -4606,6 +4904,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Ursa Major",
+        "abbreviation": "UMa",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -4690,6 +4994,12 @@
       "multiplicity": "multiple",
       "componentCount": 2,
       "positionBasis": "primary-component",
+      "constellation": {
+        "name": "Ursa Major",
+        "abbreviation": "UMa",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -4770,6 +5080,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Leo",
+        "abbreviation": "Leo",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -4850,6 +5166,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Grus",
+        "abbreviation": "Gru",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -4958,6 +5280,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Cetus",
+        "abbreviation": "Cet",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 1991.25,
@@ -5038,6 +5366,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Scorpius",
+        "abbreviation": "Sco",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -5153,6 +5487,12 @@
       "multiplicity": "multiple",
       "componentCount": 3,
       "positionBasis": "primary-component",
+      "constellation": {
+        "name": "Eridanus",
+        "abbreviation": "Eri",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -5237,6 +5577,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Lacerta",
+        "abbreviation": "Lac",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -5317,6 +5663,12 @@
       "multiplicity": "multiple",
       "componentCount": 2,
       "positionBasis": "primary-component",
+      "constellation": {
+        "name": "Ophiuchus",
+        "abbreviation": "Oph",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -5397,6 +5749,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Aquila",
+        "abbreviation": "Aql",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 1991.25,
@@ -5477,6 +5835,12 @@
       "multiplicity": "multiple",
       "componentCount": 2,
       "positionBasis": "primary-component",
+      "constellation": {
+        "name": "Cancer",
+        "abbreviation": "Cnc",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -5557,6 +5921,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Ursa Minor",
+        "abbreviation": "UMi",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -5637,6 +6007,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Orion",
+        "abbreviation": "Ori",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -5717,6 +6093,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Carina",
+        "abbreviation": "Car",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -5797,6 +6179,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Camelopardis",
+        "abbreviation": "Cam",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -5877,6 +6265,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Norma",
+        "abbreviation": "Nor",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -5957,6 +6351,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Antila",
+        "abbreviation": "Ant",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2000,
@@ -6026,6 +6426,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Eridanus",
+        "abbreviation": "Eri",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -6141,6 +6547,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Bootes",
+        "abbreviation": "Boo",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -6225,6 +6637,12 @@
       "multiplicity": "multiple",
       "componentCount": 2,
       "positionBasis": "primary-component",
+      "constellation": {
+        "name": "Camelopardis",
+        "abbreviation": "Cam",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -6305,6 +6723,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Hydra",
+        "abbreviation": "Hya",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2000,
@@ -6374,6 +6798,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Gemini",
+        "abbreviation": "Gem",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -6489,6 +6919,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Capricornus",
+        "abbreviation": "Cap",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -6569,6 +7005,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Reticulum",
+        "abbreviation": "Ret",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2000,
@@ -6638,6 +7080,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Lyra",
+        "abbreviation": "Lyr",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -6722,6 +7170,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Orion",
+        "abbreviation": "Ori",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -6806,6 +7260,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Eridanus",
+        "abbreviation": "Eri",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2000,
@@ -6875,6 +7335,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Libra",
+        "abbreviation": "Lib",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -6955,6 +7421,12 @@
       "multiplicity": "multiple",
       "componentCount": 2,
       "positionBasis": "primary-component",
+      "constellation": {
+        "name": "Lepus",
+        "abbreviation": "Lep",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -7062,6 +7534,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Draco",
+        "abbreviation": "Dra",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -7146,6 +7624,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Orion",
+        "abbreviation": "Ori",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -7226,6 +7710,12 @@
       "multiplicity": "multiple",
       "componentCount": 2,
       "positionBasis": "primary-component",
+      "constellation": {
+        "name": "Libra",
+        "abbreviation": "Lib",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -7310,6 +7800,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Pavo",
+        "abbreviation": "Pav",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -7390,6 +7886,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Pisces",
+        "abbreviation": "Psc",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -7474,6 +7976,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Telescopium",
+        "abbreviation": "Tel",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -7554,6 +8062,12 @@
       "multiplicity": "multiple",
       "componentCount": 2,
       "positionBasis": "primary-component",
+      "constellation": {
+        "name": "Aquila",
+        "abbreviation": "Aql",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -7650,6 +8164,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Lupus",
+        "abbreviation": "Lup",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -7730,6 +8250,12 @@
       "multiplicity": "multiple",
       "componentCount": 2,
       "positionBasis": "primary-component",
+      "constellation": {
+        "name": "Cassiopeia",
+        "abbreviation": "Cas",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -7810,6 +8336,12 @@
       "multiplicity": "multiple",
       "componentCount": 3,
       "positionBasis": "primary-component",
+      "constellation": {
+        "name": "Ophiuchus",
+        "abbreviation": "Oph",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -7890,6 +8422,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Hercules",
+        "abbreviation": "Her",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 1991.25,
@@ -7970,6 +8508,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Canis Minor",
+        "abbreviation": "CMi",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -8050,6 +8594,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Libra",
+        "abbreviation": "Lib",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2000,
@@ -8119,6 +8669,12 @@
       "multiplicity": "multiple",
       "componentCount": 2,
       "positionBasis": "primary-component",
+      "constellation": {
+        "name": "Sagittarius",
+        "abbreviation": "Sgr",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -8203,6 +8759,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Eridanus",
+        "abbreviation": "Eri",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -8344,6 +8906,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Auriga",
+        "abbreviation": "Aur",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -8424,6 +8992,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Pavo",
+        "abbreviation": "Pav",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -8504,6 +9078,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Pisces",
+        "abbreviation": "Psc",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -8588,6 +9168,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Leo",
+        "abbreviation": "Leo",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2000,
@@ -8657,6 +9243,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Telescopium",
+        "abbreviation": "Tel",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -8741,6 +9333,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Pegasus",
+        "abbreviation": "Peg",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2000,
@@ -8810,6 +9408,12 @@
       "multiplicity": "multiple",
       "componentCount": 5,
       "positionBasis": "primary-component",
+      "constellation": {
+        "name": "Ophiuchus",
+        "abbreviation": "Oph",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 1991.25,
@@ -8890,6 +9494,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Draco",
+        "abbreviation": "Dra",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -8970,6 +9580,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Libra",
+        "abbreviation": "Lib",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -9074,6 +9690,12 @@
       "multiplicity": "multiple",
       "componentCount": 2,
       "positionBasis": "primary-component",
+      "constellation": {
+        "name": "Pegasus",
+        "abbreviation": "Peg",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -9170,6 +9792,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Libra",
+        "abbreviation": "Lib",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -9296,6 +9924,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Ursa Major",
+        "abbreviation": "UMa",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2000,
@@ -9365,6 +9999,12 @@
       "multiplicity": "multiple",
       "componentCount": 2,
       "positionBasis": "primary-component",
+      "constellation": {
+        "name": "Ursa Major",
+        "abbreviation": "UMa",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -9461,6 +10101,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Cancer",
+        "abbreviation": "Cnc",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -9544,6 +10190,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Bootes",
+        "abbreviation": "Boo",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -9624,6 +10276,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Fornax",
+        "abbreviation": "For",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -9708,6 +10366,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Orion",
+        "abbreviation": "Ori",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -9788,6 +10452,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Virgo",
+        "abbreviation": "Vir",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -9868,6 +10538,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Draco",
+        "abbreviation": "Dra",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -9972,6 +10648,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Carina",
+        "abbreviation": "Car",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -10052,6 +10734,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Cassiopeia",
+        "abbreviation": "Cas",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -10215,6 +10903,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Cancer",
+        "abbreviation": "Cnc",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2000,
@@ -10284,6 +10978,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Taurus",
+        "abbreviation": "Tau",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2000,
@@ -10353,6 +11053,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Orion",
+        "abbreviation": "Ori",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2000,
@@ -10422,6 +11128,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Centaurus",
+        "abbreviation": "Cen",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -10502,6 +11214,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Leo",
+        "abbreviation": "Leo",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -10582,6 +11300,12 @@
       "multiplicity": "multiple",
       "componentCount": 2,
       "positionBasis": "primary-component",
+      "constellation": {
+        "name": "Bootes",
+        "abbreviation": "Boo",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -10666,6 +11390,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Cancer",
+        "abbreviation": "Cnc",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -10746,6 +11476,12 @@
       "multiplicity": "multiple",
       "componentCount": 3,
       "positionBasis": "primary-component",
+      "constellation": {
+        "name": "Cancer",
+        "abbreviation": "Cnc",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -10815,6 +11551,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Pegasus",
+        "abbreviation": "Peg",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -10895,6 +11637,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Monoceros",
+        "abbreviation": "Mon",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2015.5,
@@ -10968,6 +11716,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Vulpecula",
+        "abbreviation": "Vul",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -11048,6 +11802,12 @@
       "multiplicity": "multiple",
       "componentCount": 3,
       "positionBasis": "primary-component",
+      "constellation": {
+        "name": "Scorpius",
+        "abbreviation": "Sco",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 1991.25,
@@ -11184,6 +11944,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Cetus",
+        "abbreviation": "Cet",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2000,
@@ -11253,6 +12019,12 @@
       "multiplicity": "multiple",
       "componentCount": 3,
       "positionBasis": "primary-component",
+      "constellation": {
+        "name": "Eridanus",
+        "abbreviation": "Eri",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -11356,6 +12128,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Pegasus",
+        "abbreviation": "Peg",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -11440,6 +12218,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Leo",
+        "abbreviation": "Leo",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -11520,6 +12304,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Sextans",
+        "abbreviation": "Sex",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -11628,6 +12418,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Cepheus",
+        "abbreviation": "Cep",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -11712,6 +12508,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Cygnus",
+        "abbreviation": "Cyg",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -11792,6 +12594,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Hydra",
+        "abbreviation": "Hya",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -11876,6 +12684,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Delphinus",
+        "abbreviation": "Del",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2000,
@@ -11945,6 +12759,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Dorado",
+        "abbreviation": "Dor",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -12025,6 +12845,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Andromeda",
+        "abbreviation": "And",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2000,
@@ -12094,6 +12920,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Pisces",
+        "abbreviation": "Psc",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -12174,6 +13006,12 @@
       "multiplicity": "multiple",
       "componentCount": 2,
       "positionBasis": "primary-component",
+      "constellation": {
+        "name": "Cetus",
+        "abbreviation": "Cet",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -12258,6 +13096,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Hydra",
+        "abbreviation": "Hya",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -12331,6 +13175,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Aquarius",
+        "abbreviation": "Aqr",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -12446,6 +13296,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Gemini",
+        "abbreviation": "Gem",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -12530,6 +13386,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Cepheus",
+        "abbreviation": "Cep",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2000,
@@ -12599,6 +13461,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Libra",
+        "abbreviation": "Lib",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -12683,6 +13551,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Pisces",
+        "abbreviation": "Psc",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -12767,6 +13641,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Hydrus",
+        "abbreviation": "Hyi",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -12847,6 +13727,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Cygnus",
+        "abbreviation": "Cyg",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2000,
@@ -12916,6 +13802,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Hercules",
+        "abbreviation": "Her",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -12996,6 +13888,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Aquila",
+        "abbreviation": "Aql",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -13076,6 +13974,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Virgo",
+        "abbreviation": "Vir",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2016,
@@ -13184,6 +14088,12 @@
       "multiplicity": "single",
       "componentCount": 1,
       "positionBasis": "catalog-object",
+      "constellation": {
+        "name": "Hercules",
+        "abbreviation": "Her",
+        "referenceFrame": "J2000",
+        "sourceId": "iau-constellation-boundaries"
+      },
       "astrometry": {
         "coordinateFrame": "ICRS",
         "referenceEpochJYear": 2000,

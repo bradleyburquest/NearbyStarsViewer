@@ -23,7 +23,10 @@ export function filterSystems(
     (system) =>
       system.distance.lightYear <= maximumDistanceLy + 1e-9 &&
       (!planetHostsOnly || system.confirmedPlanets.length > 0) &&
-      (!needle || system.aliases.some((alias) => alias.toLocaleLowerCase().includes(needle))),
+      (!needle ||
+        system.aliases.some((alias) => alias.toLocaleLowerCase().includes(needle)) ||
+        system.constellation.name.toLocaleLowerCase().includes(needle) ||
+        system.constellation.abbreviation.toLocaleLowerCase() === needle),
   );
 
   return matches.sort((left, right) => {

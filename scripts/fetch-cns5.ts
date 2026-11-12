@@ -1,6 +1,7 @@
 import { writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { stellarCatalogSchema } from '../src/domain/catalog';
+import { constellationAtJ2000 } from '../src/domain/constellations';
 
 const TAP_URL = 'https://dc.g-vo.org/tap/sync';
 const EXOPLANET_TAP_URL = 'https://exoplanetarchive.ipac.caltech.edu/TAP/sync';
@@ -119,6 +120,13 @@ const baseSystems = rows.map((row) => {
     multiplicity: componentCount > 1 ? 'multiple' : 'single',
     componentCount,
     positionBasis: componentCount > 1 ? 'primary-component' : 'catalog-object',
+    constellation: constellationAtJ2000(
+      Number(row.ra),
+      Number(row.dec),
+      Number(row.epoch),
+      Number(row.pmra),
+      Number(row.pmdec),
+    ),
     astrometry: {
       coordinateFrame: 'ICRS',
       referenceEpochJYear: Number(row.epoch),
@@ -295,8 +303,8 @@ const systems = baseSystems.map((system) => {
 
 const today = new Date().toISOString().slice(0, 10);
 const catalog = stellarCatalogSchema.parse({
-  schemaVersion: '3.0.0',
-  catalogVersion: 'cns5-gavo-2023-09-04-nearest-150-v2-exoplanets',
+  schemaVersion: '4.0.0',
+  catalogVersion: 'cns5-gavo-2023-09-04-nearest-150-v3-constellations',
   generatedAt: new Date().toISOString(),
   title: 'NearbyStarsViewer nearest 150 stellar systems',
   description: 'The 150 nearest distinct stellar systems selected reproducibly from CNS5.',
@@ -313,6 +321,17 @@ const catalog = stellarCatalogSchema.parse({
       license: 'CC BY 4.0',
       acknowledgement:
         'This research has made use of the Fifth Catalogue of Nearby Stars (Golovin et al. 2023) and the GAVO Data Center.',
+    },
+    {
+      id: 'iau-constellation-boundaries',
+      title: 'IAU constellation boundaries via Astronomy Engine',
+      publisher: 'International Astronomical Union / Astronomy Engine',
+      catalogVersion: 'IAU 88-constellation boundary lookup at J2000',
+      url: 'https://www.iau.org/IAU/IAU/Astronomy-FAQs/Constellations.aspx',
+      retrievedAt: today,
+      license: 'IAU boundary definitions; Astronomy Engine MIT license',
+      acknowledgement:
+        'Constellation membership uses the 88 official IAU sky regions through Astronomy Engine.',
     },
     {
       id: 'derived-absolute-magnitude',

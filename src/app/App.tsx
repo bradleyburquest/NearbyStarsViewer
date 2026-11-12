@@ -157,7 +157,7 @@ export function App() {
           <button className="secondary-button" type="button" onClick={() => setHelpOpen(true)}>
             Help
           </button>
-          <span className="phase-badge">Phase 8 · Production hardened</span>
+          <span className="phase-badge">Phase 8 · 88 constellations</span>
         </div>
       </header>
       <section
@@ -192,7 +192,7 @@ export function App() {
               </small>
             </fieldset>
             <label>
-              Search names and IDs
+              Search names, IDs, and constellations
               <input
                 type="search"
                 value={query}
@@ -269,7 +269,7 @@ export function App() {
               <legend>Reference layers</legend>
               {(
                 [
-                  ['constellations', 'Major constellation figures'],
+                  ['constellations', 'All constellation figures'],
                   ['galacticPlane', 'Galactic plane'],
                   ['equatorialGrid', 'Equatorial grid'],
                   ['ecliptic', 'Ecliptic'],

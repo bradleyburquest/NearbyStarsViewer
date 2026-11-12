@@ -84,6 +84,12 @@ export const stellarSystemSchema = z.object({
   multiplicity: z.enum(['single', 'multiple']),
   componentCount: z.number().int().positive(),
   positionBasis: z.enum(['primary-component', 'catalog-object']),
+  constellation: z.object({
+    name: z.string().min(1),
+    abbreviation: z.string().length(3),
+    referenceFrame: z.literal('J2000'),
+    sourceId: z.literal('iau-constellation-boundaries'),
+  }),
   astrometry: astrometrySchema,
   distance: distanceSchema,
   photometry: photometrySchema,
@@ -95,7 +101,7 @@ export const stellarSystemSchema = z.object({
 
 export const stellarCatalogSchema = z
   .object({
-    schemaVersion: z.literal('3.0.0'),
+    schemaVersion: z.literal('4.0.0'),
     catalogVersion: z.string().min(1),
     generatedAt: z.iso.datetime({ offset: true }),
     title: z.string().min(1),
@@ -129,6 +135,7 @@ export const stellarCatalogSchema = z
 
       const referencedSources = [
         system.astrometry.raDeg.sourceId,
+        system.constellation.sourceId,
         system.astrometry.decDeg.sourceId,
         system.astrometry.parallaxMas.sourceId,
         system.astrometry.properMotionRaMasYr.sourceId,

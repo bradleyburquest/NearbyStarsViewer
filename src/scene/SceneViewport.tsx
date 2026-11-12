@@ -17,6 +17,8 @@ import { toSceneSystem } from './sceneModel';
 import {
   createReferenceLayerObjects,
   disposeObject,
+  updateReferenceLayers,
+  type ReferenceLayerKey,
   type ReferenceLayers,
 } from './referenceLayers';
 
@@ -68,10 +70,46 @@ type SceneRuntime = {
   zoomKeyboard: (factor: number) => void;
   starEntries: Map<string, StarEntry>;
   selectionRing: THREE.Mesh<THREE.RingGeometry, THREE.MeshBasicMaterial>;
+  referenceObjects: Record<ReferenceLayerKey, THREE.Object3D>;
 };
 
 const DEFAULT_CAMERA_POSITION = new THREE.Vector3(5.8, -7.2, 4.6);
 const AU_IN_PARSEC = 1 / 206264.806;
+
+function appendLabelDetails(label: HTMLButtonElement, system: StellarSystem): void {
+  const name = document.createElement('span');
+  name.className = 'star-label__name';
+  name.textContent = system.displayName;
+
+  const details = document.createElement('span');
+  details.className = 'star-label__details';
+  const fields = [
+    ['Distance', `${system.distance.lightYear.toFixed(2)} ly`],
+    ['Class', system.photometry.spectralType ?? 'Unavailable'],
+    ['Constellation', `${system.constellation.name} (${system.constellation.abbreviation})`],
+    [
+      'Coordinates',
+      `RA ${system.astrometry.raDeg.value.toFixed(4)}\u00b0 \u00b7 Dec ${system.astrometry.decDeg.value >= 0 ? '+' : ''}${system.astrometry.decDeg.value.toFixed(4)}\u00b0`,
+    ],
+    [
+      'Apparent mag.',
+      system.photometry.apparentMagnitudeG
+        ? `${system.photometry.apparentMagnitudeG.value.toFixed(2)} (Gaia G)`
+        : 'Unavailable',
+    ],
+  ] as const;
+  for (const [term, value] of fields) {
+    const row = document.createElement('span');
+    const key = document.createElement('span');
+    key.className = 'star-label__term';
+    key.textContent = term;
+    const result = document.createElement('span');
+    result.textContent = value;
+    row.append(key, result);
+    details.append(row);
+  }
+  label.append(name, details);
+}
 
 function createBackgroundStars(): THREE.Points<THREE.BufferGeometry, THREE.PointsMaterial> {
   const positions: number[] = [];
@@ -122,6 +160,7 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
     const runtimeRef = useRef<SceneRuntime | null>(null);
     const onSelectRef = useRef(onSelectSystem);
     const [status, setStatus] = useState<SceneStatus>('loading');
+    const [expandedLabelId, setExpandedLabelId] = useState<string | null>(null);
     onSelectRef.current = onSelectSystem;
 
     useImperativeHandle(
@@ -184,11 +223,8 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
       controls.target.set(0, 0, 0);
       controls.update();
 
-      const referenceObjects = createReferenceLayerObjects(layerOpacity);
-      for (const [key, object] of Object.entries(referenceObjects)) {
-        object.visible = layers[key as keyof ReferenceLayers];
-        scene.add(object);
-      }
+      const referenceObjects = createReferenceLayerObjects(1);
+      for (const object of Object.values(referenceObjects)) scene.add(object);
 
       const backgroundStars = createBackgroundStars();
       scene.add(backgroundStars);
@@ -238,17 +274,23 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
         const label = document.createElement('button');
         label.type = 'button';
         label.className = 'star-label';
-        label.textContent = view.name;
+        appendLabelDetails(label, system);
         label.dataset.systemId = view.id;
         label.setAttribute('aria-label', `Select ${view.name}`);
+        label.setAttribute('aria-controls', `star-label-details-${view.id}`);
+        label.setAttribute('aria-expanded', 'false');
+        label
+          .querySelector('.star-label__details')
+          ?.setAttribute('id', `star-label-details-${view.id}`);
         label.addEventListener('click', (event) => {
           event.stopPropagation();
+          setExpandedLabelId(view.id);
           onSelectRef.current(view.id);
         });
 
         const labelObject = new CSS2DObject(label);
-        labelObject.position.set(0, view.radius + 0.1, 0);
-        mesh.add(labelObject);
+        labelObject.position.copy(mesh.position).add(new THREE.Vector3(0, view.radius + 0.1, 0));
+        scene.add(labelObject);
         starEntries.set(view.id, {
           mesh,
           label,
@@ -406,6 +448,7 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
         zoomKeyboard,
         starEntries,
         selectionRing,
+        referenceObjects,
       };
       resize();
       const graphics = renderer.getContext();
@@ -454,16 +497,14 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
         renderer.domElement.remove();
         labelRenderer.domElement.remove();
       };
-    }, [
-      systems,
-      markerMode,
-      stellarColors,
-      origin,
-      layers,
-      layerOpacity,
-      showProperMotion,
-      onDiagnostics,
-    ]);
+    }, [systems, markerMode, stellarColors, origin, showProperMotion, onDiagnostics]);
+
+    useEffect(() => {
+      const runtime = runtimeRef.current;
+      if (!runtime) return;
+      updateReferenceLayers(runtime.referenceObjects, layers, layerOpacity);
+      runtime.render();
+    }, [layerOpacity, layers]);
 
     useEffect(() => {
       const runtime = runtimeRef.current;
@@ -471,9 +512,12 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
 
       runtime.starEntries.forEach((entry, systemId) => {
         const isSelected = systemId === selectedSystemId;
+        const isExpanded = systemId === expandedLabelId;
         entry.mesh.scale.setScalar(entry.baseRadius * (isSelected ? 1.55 : 1));
         entry.label.classList.toggle('is-selected', isSelected);
+        entry.label.classList.toggle('is-expanded', isExpanded);
         entry.label.setAttribute('aria-pressed', String(isSelected));
+        entry.label.setAttribute('aria-expanded', String(isExpanded));
         entry.label.hidden =
           labelMode === 'none' ||
           (labelMode === 'selected' && !isSelected) ||
@@ -486,7 +530,20 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
       runtime.selectionRing.visible = selectedEntry !== undefined;
       if (selectedEntry) runtime.selectionRing.position.copy(selectedEntry.mesh.position);
       runtime.render();
-    }, [labelMode, selectedSystemId, systems]);
+    }, [expandedLabelId, labelMode, selectedSystemId, systems]);
+
+    useEffect(() => {
+      setExpandedLabelId((current) => (current && current !== selectedSystemId ? null : current));
+    }, [selectedSystemId]);
+
+    useEffect(() => {
+      const collapseLabel = (event: PointerEvent) => {
+        if (event.target instanceof Element && event.target.closest('.star-label')) return;
+        setExpandedLabelId(null);
+      };
+      document.addEventListener('pointerdown', collapseLabel);
+      return () => document.removeEventListener('pointerdown', collapseLabel);
+    }, []);
 
     const onKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
       const runtime = runtimeRef.current;

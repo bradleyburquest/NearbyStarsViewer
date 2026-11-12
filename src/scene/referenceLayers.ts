@@ -1,14 +1,18 @@
 import * as THREE from 'three';
+import { CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
+import { constellationLines } from '../data/constellationLines';
 
 export type ReferenceLayerKey =
   'constellations' | 'galacticPlane' | 'equatorialGrid' | 'ecliptic' | 'galacticGrid';
 export type ReferenceLayers = Record<ReferenceLayerKey, boolean>;
 
 function lineLoop(points: THREE.Vector3[], color: number, opacity: number): THREE.LineLoop {
-  return new THREE.LineLoop(
+  const line = new THREE.LineLoop(
     new THREE.BufferGeometry().setFromPoints(points),
     new THREE.LineBasicMaterial({ color, transparent: true, opacity, depthWrite: false }),
   );
+  line.material.userData.opacityScale = opacity;
+  return line;
 }
 
 function circle(radius: number, z = 0): THREE.Vector3[] {
@@ -16,6 +20,16 @@ function circle(radius: number, z = 0): THREE.Vector3[] {
     const angle = (index / 128) * Math.PI * 2;
     return new THREE.Vector3(Math.cos(angle) * radius, Math.sin(angle) * radius, z);
   });
+}
+
+function celestialPosition(raDeg: number, decDeg: number, radius: number): THREE.Vector3 {
+  const ra = THREE.MathUtils.degToRad(raDeg);
+  const dec = THREE.MathUtils.degToRad(decDeg);
+  return new THREE.Vector3(
+    radius * Math.cos(dec) * Math.cos(ra),
+    radius * Math.cos(dec) * Math.sin(ra),
+    radius * Math.sin(dec),
+  );
 }
 
 export function createReferenceLayerObjects(
@@ -62,59 +76,63 @@ export function createReferenceLayerObjects(
       depthWrite: false,
     }),
   );
+  galacticPlane.material.userData.opacityScale = 0.12;
   galacticPlane.rotation.copy(galacticGrid.rotation);
 
   const constellations = new THREE.Group();
-  const figures = [
-    [
-      [83, -1],
-      [81, 6],
-      [78, -8],
-      [83, -1],
-      [88, 7],
-      [90, 15],
-    ],
-    [
-      [165, 62],
-      [178, 54],
-      [184, 57],
-      [193, 56],
-      [200, 55],
-      [206, 49],
-      [201, 48],
-    ],
-    [
-      [2, 59],
-      [10, 56],
-      [14, 60],
-      [21, 60],
-      [28, 63],
-    ],
-  ];
-  for (const figure of figures) {
-    const points = figure.map(([ra, dec]) => {
-      const raRad = THREE.MathUtils.degToRad(ra ?? 0);
-      const decRad = THREE.MathUtils.degToRad(dec ?? 0);
-      return new THREE.Vector3(
-        9.35 * Math.cos(decRad) * Math.cos(raRad),
-        9.35 * Math.cos(decRad) * Math.sin(raRad),
-        9.35 * Math.sin(decRad),
-      );
-    });
-    constellations.add(
-      new THREE.Line(
+  for (const feature of constellationLines) {
+    const centroid = new THREE.Vector3();
+    let pointCount = 0;
+    for (const segment of feature.lines) {
+      const points = segment.map(([raDeg, decDeg]) => {
+        const position = celestialPosition(raDeg, decDeg, 9.35);
+        centroid.add(position);
+        pointCount += 1;
+        return position;
+      });
+      const line = new THREE.Line(
         new THREE.BufferGeometry().setFromPoints(points),
         new THREE.LineBasicMaterial({
           color: 0x7894ad,
           transparent: true,
-          opacity,
+          opacity: opacity * (feature.rank === 1 ? 1 : 0.62),
           depthWrite: false,
         }),
-      ),
-    );
+      );
+      line.material.userData.opacityScale = feature.rank === 1 ? 1 : 0.62;
+      constellations.add(line);
+    }
+    if (feature.rank === 1 && pointCount > 0) {
+      const label = document.createElement('span');
+      label.className = 'constellation-label';
+      label.textContent = feature.name;
+      const labelObject = new CSS2DObject(label);
+      labelObject.position.copy(centroid.divideScalar(pointCount).normalize().multiplyScalar(9.45));
+      constellations.add(labelObject);
+    }
   }
 
   return { constellations, galacticPlane, equatorialGrid, ecliptic, galacticGrid };
+}
+
+export function updateReferenceLayers(
+  objects: Record<ReferenceLayerKey, THREE.Object3D>,
+  layers: ReferenceLayers,
+  opacity: number,
+): void {
+  for (const [key, object] of Object.entries(objects)) {
+    object.visible = layers[key as ReferenceLayerKey];
+    object.traverse((child) => {
+      if (!(child instanceof THREE.Line || child instanceof THREE.Mesh)) return;
+      const materials = Array.isArray(child.material) ? child.material : [child.material];
+      for (const material of materials) {
+        if ('opacity' in material) {
+          material.opacity = opacity * Number(material.userData.opacityScale ?? 1);
+          material.needsUpdate = true;
+        }
+      }
+    });
+  }
 }
 
 export function disposeObject(object: THREE.Object3D): void {
