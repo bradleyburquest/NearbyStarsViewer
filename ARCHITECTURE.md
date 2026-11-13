@@ -49,7 +49,7 @@ Typed immutable models describe systems, components, exoplanets, measurements, p
 
 - Convert RA/declination/distance to canonical Cartesian coordinates.
 - Apply supported frame/epoch transformations.
-- Translate between Sun and Earth display origins.
+- Use the Sun as the fixed scene origin and supplemental selectable reference object.
 - Derive proper-motion direction from documented components.
 - Format angles, distances, velocities, magnitudes, and uncertainties.
 
@@ -57,11 +57,11 @@ Use ICRS with a documented source epoch as the canonical representation. Scene s
 
 Constellation membership propagates catalog ICRS coordinates linearly to J2000 using proper motion, then applies the official IAU boundary lookup provided by Astronomy Engine. The separately rendered BSD-licensed Celestial Data figures cover all 88 constellations and must not be described as official boundaries.
 
-Earth mode subtracts a fixed J2000 Earth position of one astronomical unit along the ICRS +X direction, corresponding to a documented vernal-equinox model. This deterministic model is not a real-time ephemeris and is intentionally not exaggerated at parsec overview scale.
+The generated CNS5 artifact remains exactly 150 validated records. The application prepends a separately maintained Sun reference object for display, search, labels, and selection without passing it through the inverse-parallax catalog schema.
 
 ### Application state
 
-- **Shareable:** origin, selection, cutoff, layers, opacity, units
+- **Shareable:** selection, cutoff, layers, opacity, units
 - **Persistent:** display/accessibility preferences and last valid view
 - **Ephemeral:** hover, loading, open sheet, gesture, animation
 - **Render-local:** matrices, reusable vectors, frame timing
@@ -89,7 +89,7 @@ Validation rejects duplicate IDs, non-finite values, RA outside `[0, 360)`, decl
 1. Load and validate catalog metadata and payload.
 2. Normalize immutable domain models.
 3. Apply cutoff/preferences through memoized selectors.
-4. Produce positions/motion for the active origin.
+4. Produce positions/motion in the Sun-centered scene frame.
 5. Update reusable GPU buffers and layers.
 6. Dispatch picked/list-selected IDs to the store.
 7. Resolve and format details from domain data.
@@ -118,7 +118,7 @@ Automated accessibility scans exclude only the CSS2D spatial-label layer because
 ## 9. Testing
 
 - **Unit:** coordinate math, units, formatting, validation, selectors, migrations
-- **Integration:** state-to-scene models, layers, origins, search, selection
+- **Integration:** state-to-scene models, layers, search, selection
 - **Visual:** desktop/mobile and overlay snapshots with GPU-aware tolerances
 - **End to end:** load, camera, cutoff, layers, details, fullscreen, fallback
 - **Data:** known records, uniqueness, sorting, ranges, provenance, count
@@ -127,7 +127,7 @@ Automated accessibility scans exclude only the CSS2D spatial-label layer because
 
 - Authoritative redistributable stellar/exoplanet sources
 - System/component selection and tie-breaking details
-- Earth-origin epoch or ephemeris model
+- Optional dated observer/ephemeris mode, isolated from the default Sun-centered frame
 - Licensed constellation line-figure dataset
 - Device baseline and concrete performance budgets
 

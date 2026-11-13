@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { nearbyStarsCatalog } from '../../src/data/catalog';
+import { sunSystem } from '../../src/data/sunSystem';
 import { vectorMagnitude } from '../../src/domain/coordinates';
 import { toSceneSystem } from '../../src/scene/sceneModel';
 
@@ -18,5 +19,10 @@ describe('toSceneSystem', () => {
       system.distance.parsec,
       10,
     );
+  });
+
+  it('places the supplemental Sun reference object at the Cartesian origin', () => {
+    const view = toSceneSystem(sunSystem);
+    expect([view.xPc, view.yPc, view.zPc]).toEqual([0, 0, 0]);
   });
 });

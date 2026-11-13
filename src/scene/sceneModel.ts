@@ -17,11 +17,14 @@ export function toSceneSystem(
   stellarColors = true,
   scaleByBrightness = false,
 ): SceneSystem {
-  const position = sphericalToCartesian(
-    system.astrometry.raDeg.value,
-    system.astrometry.decDeg.value,
-    system.distance.parsec,
-  );
+  const position =
+    system.id === 'sun'
+      ? { x: 0, y: 0, z: 0 }
+      : sphericalToCartesian(
+          system.astrometry.raDeg.value,
+          system.astrometry.decDeg.value,
+          system.distance.parsec,
+        );
 
   return {
     id: system.id,

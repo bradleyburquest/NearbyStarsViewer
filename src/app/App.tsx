@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { SystemDetails } from '../components/SystemDetails';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { nearbyStarsCatalog } from '../data/catalog';
+import { solarPlanetNames, sunSystem } from '../data/sunSystem';
 import type { SceneDiagnostics, SceneViewportHandle } from '../scene/SceneViewport';
 import type { ReferenceLayerKey } from '../scene/referenceLayers';
 import {
@@ -19,11 +20,11 @@ const SceneViewport = lazy(() =>
   import('../scene/SceneViewport').then((module) => ({ default: module.SceneViewport })),
 );
 
-const systems = nearbyStarsCatalog.systems;
-const catalogMaximumLy = systems.at(-1)?.distance.lightYear ?? 25;
-const confirmedPlanetCount = systems.reduce(
+const systems = [sunSystem, ...nearbyStarsCatalog.systems];
+const catalogMaximumLy = nearbyStarsCatalog.systems.at(-1)?.distance.lightYear ?? 25;
+const confirmedPlanetCount = systems.reduce<number>(
   (total, system) => total + system.confirmedPlanets.length,
-  0,
+  solarPlanetNames.length,
 );
 
 export function App() {
@@ -42,7 +43,7 @@ export function App() {
   const [markerMode, setMarkerMode] = useState<MarkerMode>(initial.markerMode);
   const [stellarColors, setStellarColors] = useState(initial.stellarColors);
   const [selectedSystemId, setSelectedSystemId] = useState<string | null>(initial.selected);
-  const [origin, setOrigin] = useState(initial.origin);
+  const [revealedSystemIds, setRevealedSystemIds] = useState<ReadonlySet<string>>(() => new Set());
   const [layers, setLayers] = useState(initial.layers);
   const [layerOpacity, setLayerOpacity] = useState(initial.layerOpacity);
   const [properMotion, setProperMotion] = useState(initial.properMotion);
@@ -68,7 +69,6 @@ export function App() {
         markerMode,
         stellarColors,
         selected: selectedSystem?.id ?? null,
-        origin,
         layers,
         layerOpacity,
         properMotion,
@@ -83,7 +83,6 @@ export function App() {
     layers,
     markerMode,
     maximumDistanceLy,
-    origin,
     properMotion,
     planetHostsOnly,
     query,
@@ -99,7 +98,6 @@ export function App() {
       labels,
       markerMode,
       stellarColors,
-      origin,
       layers,
       layerOpacity,
       properMotion,
@@ -110,7 +108,6 @@ export function App() {
     layerOpacity,
     layers,
     markerMode,
-    origin,
     planetHostsOnly,
     properMotion,
     stellarColors,
@@ -157,7 +154,6 @@ export function App() {
           <button className="secondary-button" type="button" onClick={() => setHelpOpen(true)}>
             Help
           </button>
-          <span className="phase-badge">Phase 8 · 88 constellations</span>
         </div>
       </header>
       <section
@@ -166,31 +162,23 @@ export function App() {
       >
         <aside className="control-panel" aria-label="Viewer controls">
           <p className="eyebrow">Explore the catalog</p>
-          <h2>{origin === 'sun' ? 'Sun' : 'Earth'}-centered neighborhood</h2>
+          <div className="catalog-heading-row">
+            <h2>Sun-centered neighborhood</h2>
+            <button
+              className="mobile-label-switch"
+              type="button"
+              role="switch"
+              aria-label="Star labels"
+              aria-checked={labels !== 'none'}
+              onClick={() => setLabels((current) => (current === 'none' ? 'all' : 'none'))}
+            >
+              <span>Labels</span>
+              <span className="mobile-label-switch__track" aria-hidden="true">
+                <span />
+              </span>
+            </button>
+          </div>
           <div className="filter-controls">
-            <fieldset className="origin-control">
-              <legend>View origin</legend>
-              <div>
-                <button
-                  type="button"
-                  aria-pressed={origin === 'sun'}
-                  onClick={() => setOrigin('sun')}
-                >
-                  Sun
-                </button>
-                <button
-                  type="button"
-                  aria-pressed={origin === 'earth'}
-                  onClick={() => setOrigin('earth')}
-                >
-                  Earth
-                </button>
-              </div>
-              <small>
-                Earth uses a fixed J2000 vernal-equinox position; the 1 AU shift is below overview
-                scale.
-              </small>
-            </fieldset>
             <label>
               Search names, IDs, and constellations
               <input
@@ -371,10 +359,13 @@ export function App() {
               systems={visibleSystems}
               selectedSystemId={selectedSystemId}
               onSelectSystem={setSelectedSystemId}
+              revealedSystemIds={revealedSystemIds}
+              onRevealSystem={(systemId) =>
+                setRevealedSystemIds((current) => new Set(current).add(systemId))
+              }
               labelMode={labels}
               markerMode={markerMode}
               stellarColors={stellarColors}
-              origin={origin}
               layers={layers}
               layerOpacity={layerOpacity}
               showProperMotion={properMotion}
@@ -391,7 +382,7 @@ export function App() {
         )}
       </section>
       <div className="sr-only" aria-live="polite">
-        {visibleSystems.length} systems shown. {origin === 'sun' ? 'Sun' : 'Earth'} origin.
+        {visibleSystems.length} systems shown. Sun-centered origin.
         {selectedSystem ? ` Selected ${selectedSystem.displayName}.` : ''}
       </div>
       {helpOpen && (
@@ -489,10 +480,9 @@ export function App() {
       )}
       <footer className="status-bar">
         <span>
-          {origin === 'sun' ? 'Sun' : 'Earth'} origin · CNS5 · {systems.length} systems ·{' '}
-          {confirmedPlanetCount} planets
+          Sun-centered · CNS5 plus Sun · {systems.length} systems · {confirmedPlanetCount} planets
         </span>
-        <span>ICRS · per-record epoch · inverse-parallax distance</span>
+        <span>CNS5 stars: ICRS · per-record epoch · inverse-parallax distance</span>
       </footer>
     </main>
   );

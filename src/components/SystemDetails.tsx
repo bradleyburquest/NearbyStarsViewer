@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import type { StellarSystem } from '../domain/catalog';
+import { solarPlanetNames } from '../data/sunSystem';
+import { getSystemWikipediaArticleUrl, getWikipediaArticleUrl } from '../data/wikipediaArticles';
 
 type SystemDetailsProps = Readonly<{
   system: StellarSystem;
@@ -17,6 +19,24 @@ function formatUncertainty(uncertainty: number | undefined, digits = 2): string 
 
 function formatOptional(value: number | undefined, suffix: string, digits = 2): string {
   return value === undefined ? 'Not available' : `${value.toFixed(digits)} ${suffix}`;
+}
+
+function PlanetName({ name }: Readonly<{ name: string }>) {
+  const wikipediaUrl = getWikipediaArticleUrl(name);
+
+  return wikipediaUrl ? (
+    <a
+      className="planet-link"
+      href={wikipediaUrl}
+      target="_blank"
+      rel="noreferrer"
+      aria-label={`${name} on Wikipedia (opens in a new tab)`}
+    >
+      {name}
+    </a>
+  ) : (
+    <strong>{name}</strong>
+  );
 }
 
 type DataHelpTermProps = Readonly<{ id: string; label: string; help: string }>;
@@ -70,6 +90,8 @@ function DataHelpTerm({ id, label, help }: DataHelpTermProps) {
 }
 
 export function SystemDetails({ system, onClose, onFocus }: SystemDetailsProps) {
+  const isSun = system.id === 'sun';
+  const systemWikipediaUrl = getSystemWikipediaArticleUrl(system.displayName);
   const properMotionTotal = Math.hypot(
     system.astrometry.properMotionRaMasYr.value,
     system.astrometry.properMotionDecMasYr.value,
@@ -80,7 +102,21 @@ export function SystemDetails({ system, onClose, onFocus }: SystemDetailsProps) 
       <div className="details-heading">
         <div>
           <p className="eyebrow">Selected system</p>
-          <h2 id="details-title">{system.displayName}</h2>
+          <h2 id="details-title" aria-label={system.displayName}>
+            {systemWikipediaUrl ? (
+              <a
+                className="system-wikipedia-link"
+                href={systemWikipediaUrl}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`${system.displayName} on Wikipedia (opens in a new tab)`}
+              >
+                {system.displayName}
+              </a>
+            ) : (
+              system.displayName
+            )}
+          </h2>
           <p>{system.aliases.slice(1).join(' · ')}</p>
         </div>
         <button className="icon-button" type="button" onClick={onClose} aria-label="Close details">
@@ -98,36 +134,66 @@ export function SystemDetails({ system, onClose, onFocus }: SystemDetailsProps) 
             <DataHelpTerm
               id="distance"
               label="Distance"
-              help="The system's distance from the Sun, shown in light-years and parsecs. The plus-or-minus value is the uncertainty derived from its measured parallax."
+              help={
+                isSun
+                  ? 'The Sun defines the zero-distance origin of this Sun-centered scene.'
+                  : "The system's distance from the Sun, shown in light-years and parsecs. The plus-or-minus value is the uncertainty derived from its measured parallax."
+              }
             />
           </dt>
-          <dd>{system.distance.lightYear.toFixed(2)} ly</dd>
-          <dd>{system.distance.parsec.toFixed(3)} pc</dd>
-          <dd>± {system.distance.uncertaintyLightYear.toFixed(3)} ly</dd>
+          {isSun ? (
+            <dd>0 ly · Sun-centered scene origin</dd>
+          ) : (
+            <>
+              <dd>{system.distance.lightYear.toFixed(2)} ly</dd>
+              <dd>{system.distance.parsec.toFixed(3)} pc</dd>
+              <dd>± {system.distance.uncertaintyLightYear.toFixed(3)} ly</dd>
+            </>
+          )}
         </div>
         <div>
           <dt>
             <DataHelpTerm
               id="coordinates"
               label="Coordinates"
-              help="Right ascension (RA) and declination (Dec) locate the system on Earth's celestial sphere, much like longitude and latitude locate a place on Earth."
+              help={
+                isSun
+                  ? 'The Sun occupies the Cartesian coordinate origin; right ascension and declination are therefore not used to place it in this scene.'
+                  : "Right ascension (RA) and declination (Dec) locate the system on Earth's celestial sphere, much like longitude and latitude locate a place on Earth."
+              }
             />
           </dt>
-          <dd>RA {system.astrometry.raDeg.value.toFixed(5)}°</dd>
-          <dd>Dec {formatSigned(system.astrometry.decDeg.value, 5)}°</dd>
+          {isSun ? (
+            <dd>Cartesian origin (0, 0, 0)</dd>
+          ) : (
+            <>
+              <dd>RA {system.astrometry.raDeg.value.toFixed(5)}°</dd>
+              <dd>Dec {formatSigned(system.astrometry.decDeg.value, 5)}°</dd>
+            </>
+          )}
         </div>
         <div>
           <dt>
             <DataHelpTerm
               id="constellation"
               label="Constellation from Earth"
-              help="The official IAU sky region containing the system as viewed from Earth at the J2000 reference epoch. This is a direction on the sky, not a physical association."
+              help={
+                isSun
+                  ? "The Sun's apparent constellation changes through the year as Earth orbits it, so a fixed constellation is not assigned here."
+                  : 'The official IAU sky region containing the system as viewed from Earth at the J2000 reference epoch. This is a direction on the sky, not a physical association.'
+              }
             />
           </dt>
-          <dd>
-            {system.constellation.name} ({system.constellation.abbreviation})
-          </dd>
-          <dd>Official IAU sky region · {system.constellation.referenceFrame}</dd>
+          {isSun ? (
+            <dd>Varies by date along the ecliptic when viewed from Earth</dd>
+          ) : (
+            <>
+              <dd>
+                {system.constellation.name} ({system.constellation.abbreviation})
+              </dd>
+              <dd>Official IAU sky region · {system.constellation.referenceFrame}</dd>
+            </>
+          )}
         </div>
         <div>
           <dt>
@@ -148,16 +214,22 @@ export function SystemDetails({ system, onClose, onFocus }: SystemDetailsProps) 
             <DataHelpTerm
               id="apparent-magnitude"
               label="Apparent magnitude"
-              help="The star's observed brightness from Earth in Gaia's broad G band. Smaller and negative values are brighter; this is not the same as absolute magnitude."
+              help={
+                isSun
+                  ? "The Sun's visual apparent magnitude as observed from Earth. Smaller and negative values are brighter."
+                  : "The star's observed brightness from Earth in Gaia's broad G band. Smaller and negative values are brighter; this is not the same as absolute magnitude."
+              }
             />
           </dt>
           <dd>
             {system.photometry.apparentMagnitudeG
-              ? `${system.photometry.apparentMagnitudeG.value.toFixed(2)} (Gaia G)`
+              ? `${system.photometry.apparentMagnitudeG.value.toFixed(2)} (${isSun ? 'visual V' : 'Gaia G'})`
               : 'Not available'}
           </dd>
           <dd>Observed brightness from Earth · lower is brighter</dd>
-          <dd>G−RP {system.photometry.gRpColorIndex?.value.toFixed(3) ?? 'Not available'}</dd>
+          {!isSun && (
+            <dd>G−RP {system.photometry.gRpColorIndex?.value.toFixed(3) ?? 'Not available'}</dd>
+          )}
         </div>
         <div>
           <dt>
@@ -183,9 +255,11 @@ export function SystemDetails({ system, onClose, onFocus }: SystemDetailsProps) 
             />
           </dt>
           <dd>
-            {system.radialVelocityKmS
-              ? `${formatSigned(system.radialVelocityKmS.value, 2)}${formatUncertainty(system.radialVelocityKmS.uncertainty)} km/s`
-              : 'Not available'}
+            {isSun
+              ? 'Not applicable at the Sun-centered origin'
+              : system.radialVelocityKmS
+                ? `${formatSigned(system.radialVelocityKmS.value, 2)}${formatUncertainty(system.radialVelocityKmS.uncertainty)} km/s`
+                : 'Not available'}
           </dd>
         </div>
         <div>
@@ -196,9 +270,15 @@ export function SystemDetails({ system, onClose, onFocus }: SystemDetailsProps) 
               help="The system's apparent angular movement across the sky each year. The total combines its right-ascension and declination components and is measured in milliarcseconds per year."
             />
           </dt>
-          <dd>{properMotionTotal.toFixed(1)} mas/yr total</dd>
-          <dd>RA {formatSigned(system.astrometry.properMotionRaMasYr.value, 2)}</dd>
-          <dd>Dec {formatSigned(system.astrometry.properMotionDecMasYr.value, 2)}</dd>
+          {isSun ? (
+            <dd>Not applicable at the Sun-centered origin</dd>
+          ) : (
+            <>
+              <dd>{properMotionTotal.toFixed(1)} mas/yr total</dd>
+              <dd>RA {formatSigned(system.astrometry.properMotionRaMasYr.value, 2)}</dd>
+              <dd>Dec {formatSigned(system.astrometry.properMotionDecMasYr.value, 2)}</dd>
+            </>
+          )}
         </div>
         <div>
           <dt>
@@ -208,71 +288,100 @@ export function SystemDetails({ system, onClose, onFocus }: SystemDetailsProps) 
               help="Metadata describing the coordinate frame, observation epoch, and parallax measurement used for the system's position and derived distance."
             />
           </dt>
-          <dd>{system.astrometry.coordinateFrame}</dd>
-          <dd>Epoch J{system.astrometry.referenceEpochJYear}</dd>
-          <dd>
-            Parallax {system.astrometry.parallaxMas.value.toFixed(2)}
-            {formatUncertainty(system.astrometry.parallaxMas.uncertainty)} mas
-          </dd>
+          {isSun ? (
+            <dd>Local solar reference object · nominal solar properties</dd>
+          ) : (
+            <>
+              <dd>{system.astrometry.coordinateFrame}</dd>
+              <dd>Epoch J{system.astrometry.referenceEpochJYear}</dd>
+              <dd>
+                Parallax {system.astrometry.parallaxMas.value.toFixed(2)}
+                {formatUncertainty(system.astrometry.parallaxMas.uncertainty)} mas
+              </dd>
+            </>
+          )}
         </div>
       </dl>
 
-      <section className="planet-section" aria-labelledby="planet-title">
-        <div className="planet-heading">
-          <p className="eyebrow">Confirmed snapshot</p>
-          <h3 id="planet-title">Exoplanets · {system.confirmedPlanets.length}</h3>
-        </div>
-        {system.confirmedPlanets.length ? (
+      {isSun && (
+        <section className="planet-section" aria-labelledby="solar-planet-title">
+          <div className="planet-heading">
+            <p className="eyebrow">Solar System</p>
+            <h3 id="solar-planet-title">Planets · {solarPlanetNames.length}</h3>
+          </div>
           <ul>
-            {system.confirmedPlanets.map((planet) => (
-              <li key={planet.name}>
+            {solarPlanetNames.map((planet) => (
+              <li key={planet}>
                 <div>
-                  <strong>{planet.name}</strong>
-                  <span>Host: {planet.hostName}</span>
+                  <PlanetName name={planet} />
+                  <span>Orbits the Sun</span>
                 </div>
-                <dl>
-                  <div>
-                    <dt>Discovery</dt>
-                    <dd>
-                      {planet.discoveryYear} · {planet.discoveryMethod}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt>Period</dt>
-                    <dd>{formatOptional(planet.orbitalPeriodDays ?? undefined, 'days')}</dd>
-                  </div>
-                  <div>
-                    <dt>Orbit</dt>
-                    <dd>{formatOptional(planet.semiMajorAxisAu ?? undefined, 'AU', 3)}</dd>
-                  </div>
-                  <div>
-                    <dt>Mass / radius</dt>
-                    <dd>
-                      {planet.massEarth === null
-                        ? 'Not available'
-                        : `${planet.massEarth.toFixed(2)} M⊕`}{' '}
-                      ·{' '}
-                      {planet.radiusEarth === null
-                        ? 'Not available'
-                        : `${planet.radiusEarth.toFixed(2)} R⊕`}
-                    </dd>
-                  </div>
-                </dl>
               </li>
             ))}
           </ul>
-        ) : (
-          <p className="details-note">
-            No confirmed planets in the 2026-11-11 NASA Exoplanet Archive snapshot. This is not
-            proof that the system has no planets.
-          </p>
-        )}
-      </section>
+        </section>
+      )}
+
+      {!isSun && (
+        <section className="planet-section" aria-labelledby="planet-title">
+          <div className="planet-heading">
+            <p className="eyebrow">Confirmed snapshot</p>
+            <h3 id="planet-title">Exoplanets · {system.confirmedPlanets.length}</h3>
+          </div>
+          {system.confirmedPlanets.length ? (
+            <ul>
+              {system.confirmedPlanets.map((planet) => (
+                <li key={planet.name}>
+                  <div>
+                    <PlanetName name={planet.name} />
+                    <span>Host: {planet.hostName}</span>
+                  </div>
+                  <dl>
+                    <div>
+                      <dt>Discovery</dt>
+                      <dd>
+                        {planet.discoveryYear} · {planet.discoveryMethod}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Period</dt>
+                      <dd>{formatOptional(planet.orbitalPeriodDays ?? undefined, 'days')}</dd>
+                    </div>
+                    <div>
+                      <dt>Orbit</dt>
+                      <dd>{formatOptional(planet.semiMajorAxisAu ?? undefined, 'AU', 3)}</dd>
+                    </div>
+                    <div>
+                      <dt>Mass / radius</dt>
+                      <dd>
+                        {planet.massEarth === null
+                          ? 'Not available'
+                          : `${planet.massEarth.toFixed(2)} M⊕`}{' '}
+                        ·{' '}
+                        {planet.radiusEarth === null
+                          ? 'Not available'
+                          : `${planet.radiusEarth.toFixed(2)} R⊕`}
+                      </dd>
+                    </div>
+                  </dl>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="details-note">
+              No confirmed planets in the 2026-11-11 NASA Exoplanet Archive snapshot. This is not
+              proof that the system has no planets.
+            </p>
+          )}
+        </section>
+      )}
 
       <p className="details-note">
-        Position basis: {system.positionBasis.replaceAll('-', ' ')}. Astrometry: CNS5. Confirmed
-        planets and available host properties: NASA Exoplanet Archive PSCompPars snapshot
-        2026-11-11. Missing values are not shown as zero.
+        {isSun
+          ? 'The Sun is the fixed coordinate origin and is not one of the 150 parallax-selected CNS5 systems.'
+          : 'Position basis: ' +
+            system.positionBasis.replaceAll('-', ' ') +
+            '. Astrometry: CNS5. Confirmed planets and available host properties: NASA Exoplanet Archive PSCompPars snapshot 2026-11-11. Missing values are not shown as zero.'}
       </p>
     </aside>
   );

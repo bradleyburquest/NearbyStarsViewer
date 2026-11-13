@@ -6,7 +6,6 @@ const preferences: Preferences = {
   labels: 'selected',
   markerMode: 'brightness',
   stellarColors: false,
-  origin: 'earth',
   layerOpacity: 0.7,
   properMotion: true,
   planetHostsOnly: true,
@@ -31,9 +30,17 @@ describe('preferences', () => {
       'nearby-stars-viewer:preferences:v1',
       JSON.stringify({
         version: 1,
-        preferences: { unit: 'miles', origin: 'mars', layerOpacity: 9 },
+        preferences: { unit: 'miles', layerOpacity: 9 },
       }),
     );
     expect(readPreferences(localStorage)).toEqual({});
+  });
+
+  it('migrates the former prominent-label default to all labels', () => {
+    localStorage.setItem(
+      'nearby-stars-viewer:preferences:v1',
+      JSON.stringify({ version: 1, preferences: { labels: 'prominent' } }),
+    );
+    expect(readPreferences(localStorage)).toEqual({ labels: 'all' });
   });
 });

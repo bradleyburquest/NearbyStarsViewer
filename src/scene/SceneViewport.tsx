@@ -11,7 +11,6 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { CSS2DObject, CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 import type { StellarSystem } from '../domain/catalog';
 import { properMotionDirection } from '../domain/motion';
-import type { OriginMode } from '../app/viewState';
 import type { LabelMode, MarkerMode } from '../services/catalogFilters';
 import { toSceneSystem } from './sceneModel';
 import {
@@ -28,10 +27,11 @@ type SceneViewportProps = Readonly<{
   systems: readonly StellarSystem[];
   selectedSystemId: string | null;
   onSelectSystem: (systemId: string) => void;
+  revealedSystemIds: ReadonlySet<string>;
+  onRevealSystem: (systemId: string) => void;
   labelMode: LabelMode;
   markerMode: MarkerMode;
   stellarColors: boolean;
-  origin: OriginMode;
   layers: ReferenceLayers;
   layerOpacity: number;
   showProperMotion: boolean;
@@ -71,11 +71,10 @@ type SceneRuntime = {
   starEntries: Map<string, StarEntry>;
   selectionRing: THREE.Mesh<THREE.RingGeometry, THREE.MeshBasicMaterial>;
   referenceObjects: Record<ReferenceLayerKey, THREE.Object3D>;
+  properMotionGroup: THREE.Group;
 };
 
 const DEFAULT_CAMERA_POSITION = new THREE.Vector3(5.8, -7.2, 4.6);
-const AU_IN_PARSEC = 1 / 206264.806;
-
 function appendLabelDetails(label: HTMLButtonElement, system: StellarSystem): void {
   const name = document.createElement('span');
   name.className = 'star-label__name';
@@ -83,18 +82,26 @@ function appendLabelDetails(label: HTMLButtonElement, system: StellarSystem): vo
 
   const details = document.createElement('span');
   details.className = 'star-label__details';
+  const isSun = system.id === 'sun';
   const fields = [
-    ['Distance', `${system.distance.lightYear.toFixed(2)} ly`],
+    ['Distance', isSun ? '0 ly · scene origin' : `${system.distance.lightYear.toFixed(2)} ly`],
     ['Class', system.photometry.spectralType ?? 'Unavailable'],
-    ['Constellation', `${system.constellation.name} (${system.constellation.abbreviation})`],
+    [
+      'Constellation',
+      isSun
+        ? 'Varies by date from Earth'
+        : `${system.constellation.name} (${system.constellation.abbreviation})`,
+    ],
     [
       'Coordinates',
-      `RA ${system.astrometry.raDeg.value.toFixed(4)}\u00b0 \u00b7 Dec ${system.astrometry.decDeg.value >= 0 ? '+' : ''}${system.astrometry.decDeg.value.toFixed(4)}\u00b0`,
+      isSun
+        ? 'Origin (0, 0, 0)'
+        : `RA ${system.astrometry.raDeg.value.toFixed(4)}\u00b0 \u00b7 Dec ${system.astrometry.decDeg.value >= 0 ? '+' : ''}${system.astrometry.decDeg.value.toFixed(4)}\u00b0`,
     ],
     [
       'Apparent mag.',
       system.photometry.apparentMagnitudeG
-        ? `${system.photometry.apparentMagnitudeG.value.toFixed(2)} (Gaia G)`
+        ? `${system.photometry.apparentMagnitudeG.value.toFixed(2)} (${isSun ? 'visual V' : 'Gaia G'})`
         : 'Unavailable',
     ],
   ] as const;
@@ -145,10 +152,11 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
       systems,
       selectedSystemId,
       onSelectSystem,
+      revealedSystemIds,
+      onRevealSystem,
       labelMode,
       markerMode,
       stellarColors,
-      origin,
       layers,
       layerOpacity,
       showProperMotion,
@@ -159,9 +167,19 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
     const containerRef = useRef<HTMLDivElement>(null);
     const runtimeRef = useRef<SceneRuntime | null>(null);
     const onSelectRef = useRef(onSelectSystem);
+    const onRevealRef = useRef(onRevealSystem);
+    const labelModeRef = useRef(labelMode);
+    const layersRef = useRef(layers);
+    const layerOpacityRef = useRef(layerOpacity);
+    const properMotionRef = useRef(showProperMotion);
     const [status, setStatus] = useState<SceneStatus>('loading');
     const [expandedLabelId, setExpandedLabelId] = useState<string | null>(null);
     onSelectRef.current = onSelectSystem;
+    onRevealRef.current = onRevealSystem;
+    labelModeRef.current = labelMode;
+    layersRef.current = layers;
+    layerOpacityRef.current = layerOpacity;
+    properMotionRef.current = showProperMotion;
 
     useImperativeHandle(
       ref,
@@ -224,17 +242,15 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
       controls.update();
 
       const referenceObjects = createReferenceLayerObjects(1);
+      updateReferenceLayers(referenceObjects, layersRef.current, layerOpacityRef.current);
       for (const object of Object.values(referenceObjects)) scene.add(object);
+
+      const properMotionGroup = new THREE.Group();
+      properMotionGroup.visible = properMotionRef.current;
+      scene.add(properMotionGroup);
 
       const backgroundStars = createBackgroundStars();
       scene.add(backgroundStars);
-
-      const sunGeometry = new THREE.SphereGeometry(0.1, 24, 16);
-      const sunMaterial = new THREE.MeshBasicMaterial({ color: 0xffcc73 });
-      const sun = new THREE.Mesh(sunGeometry, sunMaterial);
-      sun.name = 'Sun';
-      sun.position.x = origin === 'earth' ? -AU_IN_PARSEC : 0;
-      scene.add(sun);
 
       const sunHaloGeometry = new THREE.RingGeometry(0.18, 0.205, 48);
       const sunHaloMaterial = new THREE.MeshBasicMaterial({
@@ -245,17 +261,7 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
       });
       const sunHalo = new THREE.Mesh(sunHaloGeometry, sunHaloMaterial);
       sunHalo.rotation.x = Math.PI / 2;
-      sunHalo.position.copy(sun.position);
       scene.add(sunHalo);
-
-      if (origin === 'earth') {
-        const earth = new THREE.Mesh(
-          new THREE.SphereGeometry(0.075, 20, 12),
-          new THREE.MeshBasicMaterial({ color: 0x68a8df }),
-        );
-        earth.name = 'Earth';
-        scene.add(earth);
-      }
 
       const sphereGeometry = new THREE.SphereGeometry(1, 20, 14);
       const starEntries = new Map<string, StarEntry>();
@@ -265,7 +271,7 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
         const view = toSceneSystem(system, stellarColors, markerMode === 'brightness');
         const material = new THREE.MeshBasicMaterial({ color: view.color });
         const mesh = new THREE.Mesh(sphereGeometry, material);
-        mesh.position.set(view.xPc - (origin === 'earth' ? AU_IN_PARSEC : 0), view.yPc, view.zPc);
+        mesh.position.set(view.xPc, view.yPc, view.zPc);
         mesh.scale.setScalar(view.radius);
         mesh.userData.systemId = view.id;
         scene.add(mesh);
@@ -284,6 +290,7 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
           ?.setAttribute('id', `star-label-details-${view.id}`);
         label.addEventListener('click', (event) => {
           event.stopPropagation();
+          onRevealRef.current(view.id);
           setExpandedLabelId(view.id);
           onSelectRef.current(view.id);
         });
@@ -300,34 +307,31 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
             (system.photometry.apparentMagnitudeG?.value ?? Number.POSITIVE_INFINITY) <= 3,
         });
 
-        if (showProperMotion) {
-          const direction = properMotionDirection(
-            system.astrometry.raDeg.value,
-            system.astrometry.decDeg.value,
+        const direction = properMotionDirection(
+          system.astrometry.raDeg.value,
+          system.astrometry.decDeg.value,
+          system.astrometry.properMotionRaMasYr.value,
+          system.astrometry.properMotionDecMasYr.value,
+        );
+        if (direction) {
+          const rate = Math.hypot(
             system.astrometry.properMotionRaMasYr.value,
             system.astrometry.properMotionDecMasYr.value,
           );
-          if (direction) {
-            const rate = Math.hypot(
-              system.astrometry.properMotionRaMasYr.value,
-              system.astrometry.properMotionDecMasYr.value,
-            );
-            const length = THREE.MathUtils.clamp(
-              0.18 + Math.log10(Math.max(1, rate)) * 0.12,
-              0.22,
-              0.7,
-            );
-            const arrow = new THREE.ArrowHelper(
-              new THREE.Vector3(direction.x, direction.y, direction.z),
-              mesh.position,
-              length,
-              0x78d8c4,
-              0.09,
-              0.045,
-            );
-            arrow.name = 'proper-motion-vector';
-            scene.add(arrow);
-          }
+          const length = THREE.MathUtils.clamp(
+            0.18 + Math.log10(Math.max(1, rate)) * 0.12,
+            0.22,
+            0.7,
+          );
+          const arrow = new THREE.ArrowHelper(
+            new THREE.Vector3(direction.x, direction.y, direction.z),
+            mesh.position,
+            length,
+            0x78d8c4,
+            0.09,
+            0.045,
+          );
+          properMotionGroup.add(arrow);
         }
       }
 
@@ -418,7 +422,11 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
         raycaster.setFromCamera(pointer, camera);
         const hit = raycaster.intersectObjects(selectableMeshes, false)[0];
         const systemId = hit?.object.userData.systemId;
-        if (typeof systemId === 'string') onSelectRef.current(systemId);
+        if (typeof systemId === 'string') {
+          onRevealRef.current(systemId);
+          if (labelModeRef.current === 'none') setExpandedLabelId(systemId);
+          onSelectRef.current(systemId);
+        }
       };
 
       renderer.domElement.addEventListener('pointerdown', onPointerDown);
@@ -449,6 +457,7 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
         starEntries,
         selectionRing,
         referenceObjects,
+        properMotionGroup,
       };
       resize();
       const graphics = renderer.getContext();
@@ -477,27 +486,17 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
         starEntries.forEach(({ mesh }) => mesh.material.dispose());
         selectionRingGeometry.dispose();
         selectionRingMaterial.dispose();
-        sunGeometry.dispose();
-        sunMaterial.dispose();
         sunHaloGeometry.dispose();
         sunHaloMaterial.dispose();
         Object.values(referenceObjects).forEach(disposeObject);
-        scene.getObjectByName('Earth')?.traverse((object) => {
-          if (object instanceof THREE.Mesh) {
-            object.geometry.dispose();
-            object.material.dispose();
-          }
-        });
-        scene.children
-          .filter((object) => object.name === 'proper-motion-vector')
-          .forEach(disposeObject);
+        disposeObject(properMotionGroup);
         backgroundStars.geometry.dispose();
         backgroundStars.material.dispose();
         renderer.dispose();
         renderer.domElement.remove();
         labelRenderer.domElement.remove();
       };
-    }, [systems, markerMode, stellarColors, origin, showProperMotion, onDiagnostics]);
+    }, [systems, markerMode, stellarColors, onDiagnostics]);
 
     useEffect(() => {
       const runtime = runtimeRef.current;
@@ -509,19 +508,27 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
     useEffect(() => {
       const runtime = runtimeRef.current;
       if (!runtime) return;
+      runtime.properMotionGroup.visible = showProperMotion;
+      runtime.render();
+    }, [showProperMotion]);
+
+    useEffect(() => {
+      const runtime = runtimeRef.current;
+      if (!runtime) return;
 
       runtime.starEntries.forEach((entry, systemId) => {
         const isSelected = systemId === selectedSystemId;
         const isExpanded = systemId === expandedLabelId;
+        const isAlwaysVisible = systemId === 'sun' || revealedSystemIds.has(systemId);
         entry.mesh.scale.setScalar(entry.baseRadius * (isSelected ? 1.55 : 1));
         entry.label.classList.toggle('is-selected', isSelected);
         entry.label.classList.toggle('is-expanded', isExpanded);
         entry.label.setAttribute('aria-pressed', String(isSelected));
         entry.label.setAttribute('aria-expanded', String(isExpanded));
         entry.label.hidden =
-          labelMode === 'none' ||
-          (labelMode === 'selected' && !isSelected) ||
-          (labelMode === 'prominent' && !entry.prominent && !isSelected);
+          (labelMode === 'none' && !isAlwaysVisible) ||
+          (labelMode === 'selected' && !isSelected && !isAlwaysVisible) ||
+          (labelMode === 'prominent' && !entry.prominent && !isSelected && !isAlwaysVisible);
       });
 
       const selectedEntry = selectedSystemId
@@ -530,7 +537,7 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
       runtime.selectionRing.visible = selectedEntry !== undefined;
       if (selectedEntry) runtime.selectionRing.position.copy(selectedEntry.mesh.position);
       runtime.render();
-    }, [expandedLabelId, labelMode, selectedSystemId, systems]);
+    }, [expandedLabelId, labelMode, revealedSystemIds, selectedSystemId, systems]);
 
     useEffect(() => {
       setExpandedLabelId((current) => (current && current !== selectedSystemId ? null : current));
@@ -591,7 +598,7 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
         <div className="scene-heading">
           <div>
             <p className="eyebrow">3D viewport · 1 unit = 1 parsec</p>
-            <h2 id="scene-title">{origin === 'sun' ? 'Sun' : 'Earth'}-centered scene</h2>
+            <h2 id="scene-title">Sun-centered scene</h2>
           </div>
           <span className={`render-status render-status--${status}`}>
             {status === 'ready'
@@ -608,7 +615,7 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
           role="application"
           tabIndex={0}
           onKeyDown={onKeyDown}
-          aria-label={`Interactive ${origin}-centered three-dimensional scene showing ${systems.length} stellar systems. Drag to orbit, scroll to zoom, use arrow keys to orbit, plus or minus to zoom, zero to reset, and F for fullscreen.`}
+          aria-label={`Interactive Sun-centered three-dimensional scene showing ${systems.length} stellar systems. Drag to orbit, scroll to zoom, use arrow keys to orbit, plus or minus to zoom, zero to reset, and F for fullscreen.`}
         >
           <div className="axis-key" aria-hidden="true">
             <span>XY · celestial equator</span>

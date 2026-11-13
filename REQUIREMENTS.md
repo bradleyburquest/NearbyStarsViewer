@@ -2,20 +2,20 @@
 
 ## 1. Product summary
 
-NearbyStarsViewer is a web application for exploring the 150 stellar systems closest to the Sun in three dimensions. It combines a navigable scene, astronomical overlays, and inspectable catalog data.
+NearbyStarsViewer is a web application for exploring the 150 cataloged stellar systems closest to the Sun in three dimensions. The selectable Sun reference object brings the displayed total to 151 systems.
 
 This normalizes `NSV_requirements.md`. “Must” is initial-release scope; “should” is desirable after the first complete vertical slice.
 
 ## 2. Users and goals
 
-Astronomy enthusiasts, students, educators, and casual learners can understand the local stellar neighborhood; change origin; navigate, search, select, and inspect systems; limit by distance; and use constellations, planes, and grids for orientation.
+Astronomy enthusiasts, students, educators, and casual learners can understand the local stellar neighborhood; navigate, search, select, and inspect systems; limit by distance; and use constellations, planes, and grids for orientation.
 
 ## 3. Scope assumptions
 
 - The production dataset has exactly 150 top-level **stellar systems** ranked by best available Sun distance. Multiple-system components are nested.
 - “Size” is physical radius when available; scene marker size is a disclosed visual encoding.
 - Planet data includes confirmed exoplanets from a versioned snapshot, not candidates.
-- Earth mode uses a documented epoch/position model and need not be real-time initially.
+- The coordinate origin is always the Sun.
 - Proper motion is angular sky motion; radial velocity is separate.
 - Constellation context means major line figures and labels, not necessarily IAU boundaries.
 
@@ -44,10 +44,9 @@ Astronomy enthusiasts, students, educators, and casual learners can understand t
 
 ### FR-4 Origin
 
-- Select Sun- or Earth-centered origin; default to Sun.
-- Always display the active origin.
-- Preserve compatible settings during switching.
-- Document the coordinate/epoch model in the UI.
+- Use a fixed Sun-centered origin.
+- Include the Sun as a selectable reference object with label and details.
+- Keep the Sun supplemental to the 150 validated CNS5 records.
 
 ### FR-5 Selection and data
 
@@ -59,8 +58,8 @@ Astronomy enthusiasts, students, educators, and casual learners can understand t
 ### FR-6 Distance cutoff
 
 - Set maximum distance and hide systems beyond it.
-- Display cutoff, unit, and visible count out of 150.
-- Do not move the camera or change origin when filtering.
+- Display cutoff, unit, and visible count out of 151 displayed systems.
+- Do not move the camera when filtering.
 
 ### FR-7 Reference layers
 
@@ -116,7 +115,7 @@ Invalid catalog/state fails safely; optional-overlay failures do not block explo
 1. A validated, attributed 150-system catalog loads in production.
 2. Positions use documented coordinates and cutoff counts are correct.
 3. Orbit, zoom, reset, selection, search, and details work by pointer and keyboard.
-4. Sun/Earth origins switch correctly under the documented model.
+4. The Sun remains the fixed origin and is selectable like the catalog stars.
 5. All five layer categories toggle independently and opacity works.
 6. Motion vectors can be enabled and are explained.
 7. Fullscreen works or degrades cleanly.
@@ -139,7 +138,7 @@ Phase 8 automates WCAG A/AA scanning in Chromium and WebKit, verifies the deploy
 
 - CNS5 and NASA Exoplanet Archive PSCompPars are selected for Phase 7; broader non-host stellar-property sources remain open.
 - Tie-breaking and uncertainty policy at the 150th system
-- A future phase may replace the Phase 5 fixed J2000 Earth-origin model with a dated ephemeris.
+- A future phase may add a dated observer/ephemeris mode as a separate feature without changing the default Sun-centered scientific frame.
 - Phase 8.1 uses the BSD-licensed Celestial Data collection for comprehensive constellation figures and Astronomy Engine for IAU boundary membership.
 - Performance baseline devices and measured budgets
 - A representative-laptop frame-time benchmark remains desirable; Phase 6 establishes a 600 kB minified per-chunk build budget and Chromium/WebKit browser gates.

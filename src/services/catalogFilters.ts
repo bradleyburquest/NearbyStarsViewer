@@ -22,7 +22,7 @@ export function filterSystems(
   const matches = systems.filter(
     (system) =>
       system.distance.lightYear <= maximumDistanceLy + 1e-9 &&
-      (!planetHostsOnly || system.confirmedPlanets.length > 0) &&
+      (!planetHostsOnly || system.id === 'sun' || system.confirmedPlanets.length > 0) &&
       (!needle ||
         system.aliases.some((alias) => alias.toLocaleLowerCase().includes(needle)) ||
         system.constellation.name.toLocaleLowerCase().includes(needle) ||

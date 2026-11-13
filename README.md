@@ -1,6 +1,6 @@
 # NearbyStarsViewer
 
-NearbyStarsViewer is a browser-based 3D explorer for the 150 stellar systems closest to the Sun. Users can navigate the local stellar neighborhood, search catalog names and identifiers, filter by distance, and inspect astrometry and photometry.
+NearbyStarsViewer is a browser-based, Sun-centered 3D explorer for the 150 cataloged stellar systems closest to the Sun. The Sun is also included as a selectable reference object, giving the viewer 151 displayed systems. Users can navigate the local stellar neighborhood, search catalog names and identifiers, filter by distance, and inspect astrometry and photometry.
 
 ## Project status
 

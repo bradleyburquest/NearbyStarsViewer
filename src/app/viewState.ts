@@ -1,8 +1,6 @@
 import type { DistanceUnit, LabelMode, MarkerMode, SortMode } from '../services/catalogFilters';
 import type { ReferenceLayers } from '../scene/referenceLayers';
 
-export type OriginMode = 'sun' | 'earth';
-
 export type ViewState = {
   query: string;
   maximumDistanceLy: number;
@@ -12,7 +10,6 @@ export type ViewState = {
   markerMode: MarkerMode;
   stellarColors: boolean;
   selected: string | null;
-  origin: OriginMode;
   layers: ReferenceLayers;
   layerOpacity: number;
   properMotion: boolean;
@@ -33,11 +30,10 @@ export function readViewState(search: string, maximumCatalogDistanceLy: number):
         : maximumCatalogDistanceLy,
     unit: oneOf(params.get('unit'), ['ly', 'pc'], 'ly'),
     sort: oneOf(params.get('sort'), ['distance', 'name', 'magnitude'], 'distance'),
-    labels: oneOf(params.get('labels'), ['none', 'selected', 'prominent', 'all'], 'prominent'),
+    labels: oneOf(params.get('labels'), ['none', 'selected', 'prominent', 'all'], 'all'),
     markerMode: oneOf(params.get('markers'), ['clarity', 'brightness'], 'clarity'),
     stellarColors: params.get('colors') !== '0',
     selected: params.get('selected'),
-    origin: oneOf(params.get('origin'), ['sun', 'earth'], 'sun'),
     layers: {
       constellations: params.get('constellations') === '1',
       galacticPlane: params.get('galacticPlane') === '1',
@@ -58,11 +54,10 @@ export function writeViewState(state: ViewState, maximumCatalogDistanceLy: numbe
     params.set('distance', state.maximumDistanceLy.toFixed(2));
   if (state.unit !== 'ly') params.set('unit', state.unit);
   if (state.sort !== 'distance') params.set('sort', state.sort);
-  if (state.labels !== 'prominent') params.set('labels', state.labels);
+  if (state.labels !== 'all') params.set('labels', state.labels);
   if (state.markerMode !== 'clarity') params.set('markers', state.markerMode);
   if (!state.stellarColors) params.set('colors', '0');
   if (state.selected) params.set('selected', state.selected);
-  if (state.origin !== 'sun') params.set('origin', state.origin);
   for (const [key, enabled] of Object.entries(state.layers)) if (enabled) params.set(key, '1');
   if (state.layerOpacity !== 0.55) params.set('layerOpacity', state.layerOpacity.toFixed(2));
   if (state.properMotion) params.set('motion', '1');

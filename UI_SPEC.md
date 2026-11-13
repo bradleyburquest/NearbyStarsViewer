@@ -4,13 +4,13 @@
 
 The interface should feel like an astronomical instrument while remaining approachable. The 3D scene is primary; controls are compact, discoverable, reversible, and do not obscure context.
 
-Always communicate the active origin, distance cutoff, visible reference layers, selected object, and whether sizes or distances are literal or visually encoded.
+Always communicate the fixed Sun-centered origin, distance cutoff, visible reference layers, selected object, and whether sizes or distances are literal or visually encoded.
 
 ## 2. Layout
 
 ### Desktop (at least 1024 CSS px)
 
-- **Top bar:** name, Sun/Earth selector, search, reset, fullscreen, help/settings.
+- **Top bar:** name, search, reset, fullscreen, help/settings.
 - **Left panel:** distance and layer controls; collapsible.
 - **Center:** responsive 3D viewport.
 - **Right panel:** selected-system details; closed until selection and collapsible.
@@ -39,9 +39,7 @@ Camera zoom changes perspective. The distance cutoff independently controls whic
 
 ### Origin and search
 
-Use a **Sun / Earth** segmented control, default Sun. Preserve compatible settings on switch and echo the origin in status/accessibility text. Earth mode is a viewpoint transformation, not a stationary-Earth claim.
-
-Phase 5 uses Earth's fixed J2000 vernal-equinox heliocentric position (+X, 1 AU). The resulting translation is mathematically applied but visually negligible at parsec overview scale; the interface discloses this rather than exaggerating it.
+The scene has one fixed Sun-centered origin. The Sun is a selectable reference object with a spatial label, compact popup, catalog-list entry, Selected System data, and the eight named Solar System planets. It is supplemental to, and not counted among, the 150 CNS5 systems. The confirmed-planet-host filter includes the Sun.
 
 Search common names, catalog IDs, full constellation names, and official constellation abbreviations. Results show name and distance, support keyboard navigation, and select the chosen system.
 
@@ -52,8 +50,8 @@ Use the Fullscreen API. If unavailable or denied, maximize within the viewport a
 ### Distance cutoff
 
 - Labeled slider plus numeric entry, defaulting to light-years.
-- Maximum includes all 150 systems.
-- Show `N of 150 systems within X ly`.
+- Maximum includes the Sun and all 150 catalog systems.
+- Show the visible count out of 151 displayed systems.
 - Apply immediately without moving the camera.
 - Allow light-year/parsec display conversion without changing the underlying filter.
 
@@ -65,11 +63,11 @@ Independently toggle all constellation lines/labels, galactic plane, equatorial 
 
 ### Star display
 
-Offer labels (none, selected, prominent), proper-motion vectors (default off), apparent-brightness versus clarity modes, and spectral-class color with a legend. Selecting a star label opens an anchored dropdown below the stationary name with distance in light-years, spectral classification, constellation, right ascension and declination, and apparent Gaia G magnitude. Apparent magnitude is explicitly identified as Earth-observed brightness, with lower values being brighter; absolute magnitude is not shown in this compact UI. Clicking outside the label collapses the dropdown without clearing the selected system.
+Offer labels (all by default, prominent, selected only, or none), proper-motion vectors (default off), apparent-brightness versus clarity modes, and spectral-class color with a legend. On screens up to 760 px wide, place a compact Labels switch at the right of the “Sun-centered neighborhood” heading; it toggles directly between all labels and none while the full label-mode selector remains available below. The Sun's label is always visible. Every star clicked in the viewer is added to a session-only revealed-label set and remains labeled until the page is refreshed, including in none mode and after another star is selected. In none mode, clicking a star marker also expands its information dropdown; clicking elsewhere collapses the dropdown without hiding any revealed label. Proper-motion visibility updates its persistent scene group in place and must not recreate the scene or alter reference-layer visibility. Selecting a star label opens an anchored dropdown below the stationary name with distance in light-years, spectral classification, constellation, right ascension and declination, and apparent Gaia G magnitude. Apparent magnitude is explicitly identified as Earth-observed brightness, with lower values being brighter; absolute magnitude is not shown in this compact UI. Clicking outside the label collapses the dropdown without clearing the selected system.
 
 ## 5. Star representation
 
-- Plot transformed catalog positions in the active frame.
+- Plot catalog positions in the fixed Sun-centered frame.
 - Hue may approximate spectral class/temperature.
 - Marker size/glow is perceptual, not literal diameter or brightness; disclose this.
 - Preserve a minimum selectable marker size.
@@ -103,16 +101,16 @@ Show lightweight catalog/asset progress and disable only unavailable controls. G
 
 - Target WCAG 2.2 AA for application UI.
 - Give controls accessible names, states, and keyboard paths.
-- Maintain a canvas summary for origin, cutoff, count, and selection.
+- Maintain a canvas summary for the Sun-centered frame, cutoff, count, and selection.
 - Provide a searchable semantic catalog view so information is not canvas-only.
 - Support forced colors and 200% text zoom; do not rely on color alone.
-- Announce selection, origin, count, and errors through a polite live region.
+- Announce selection, count, and errors through a polite live region.
 
 ## 9. Persistence and visual direction
 
 Phase 6 provides a non-blocking help dialog, keyboard shortcut reference, skip navigation, polite state announcements, and locally persisted validated display preferences. Shareable URL state takes precedence over saved preferences.
 
-Persist non-sensitive origin, units, layers, opacity, label mode, and effect preferences. Validate/version saved and shareable URL state; never restore an invalid camera. Use a dismissible first-use hint, not a blocking tour.
+Persist non-sensitive units, layers, opacity, label mode, and effect preferences. Validate/version saved and shareable URL state; never restore an invalid camera. Use a dismissible first-use hint, not a blocking tour.
 
 Use a near-black low-chroma background, restrained blue/amber accents, clear hierarchy, and compact controls. Avoid excessive bloom, decorative animation, and dense labels. Include legends for spectral color, marker sizing, units, and motion vectors.
 
