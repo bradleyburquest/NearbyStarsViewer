@@ -1,7 +1,7 @@
 import type { ViewState } from './viewState';
 
 const STORAGE_KEY = 'nearby-stars-viewer:preferences:v1';
-const CURRENT_VERSION = 2;
+const CURRENT_VERSION = 3;
 
 export type Preferences = Pick<
   ViewState,
@@ -21,19 +21,21 @@ export function readPreferences(storage: Storage | undefined): Partial<Preferenc
     const parsed: unknown = JSON.parse(storage.getItem(STORAGE_KEY) ?? 'null');
     if (!parsed || typeof parsed !== 'object' || !('version' in parsed)) return {};
     const candidate = parsed as { version: unknown; preferences?: unknown };
-    if (candidate.version !== 1 && candidate.version !== CURRENT_VERSION) return {};
+    if (candidate.version !== 1 && candidate.version !== 2 && candidate.version !== CURRENT_VERSION)
+      return {};
     if (!candidate.preferences || typeof candidate.preferences !== 'object') return {};
     const value = candidate.preferences as Record<string, unknown>;
     const result: Partial<Preferences> = {};
     if (value.unit === 'ly' || value.unit === 'pc') result.unit = value.unit;
-    if (
+    const hasLabelMode =
       value.labels === 'none' ||
       value.labels === 'selected' ||
       value.labels === 'prominent' ||
-      value.labels === 'all'
-    )
-      result.labels =
-        candidate.version === 1 && value.labels === 'prominent' ? 'all' : value.labels;
+      value.labels === 'all';
+    const wasFormerDefault =
+      candidate.version !== CURRENT_VERSION &&
+      (value.labels === 'all' || value.labels === 'prominent');
+    if (hasLabelMode && !wasFormerDefault) result.labels = value.labels as Preferences['labels'];
     if (value.markerMode === 'clarity' || value.markerMode === 'brightness')
       result.markerMode = value.markerMode;
     if (typeof value.stellarColors === 'boolean') result.stellarColors = value.stellarColors;

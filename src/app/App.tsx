@@ -29,7 +29,10 @@ const confirmedPlanetCount = systems.reduce<number>(
 
 export function App() {
   const initial = useMemo(() => {
-    const urlState = readViewState(window.location.search, catalogMaximumLy);
+    const defaultLabelMode: LabelMode = window.matchMedia?.('(max-width: 760px)').matches
+      ? 'none'
+      : 'all';
+    const urlState = readViewState(window.location.search, catalogMaximumLy, defaultLabelMode);
     if (window.location.search.length > 1) return urlState;
     return { ...urlState, ...readPreferences(window.localStorage) };
   }, []);

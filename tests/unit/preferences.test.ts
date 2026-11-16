@@ -36,11 +36,17 @@ describe('preferences', () => {
     expect(readPreferences(localStorage)).toEqual({});
   });
 
-  it('migrates the former prominent-label default to all labels', () => {
+  it('drops former label defaults so the viewport can choose the responsive default', () => {
     localStorage.setItem(
       'nearby-stars-viewer:preferences:v1',
       JSON.stringify({ version: 1, preferences: { labels: 'prominent' } }),
     );
-    expect(readPreferences(localStorage)).toEqual({ labels: 'all' });
+    expect(readPreferences(localStorage)).toEqual({});
+
+    localStorage.setItem(
+      'nearby-stars-viewer:preferences:v1',
+      JSON.stringify({ version: 2, preferences: { labels: 'all' } }),
+    );
+    expect(readPreferences(localStorage)).toEqual({});
   });
 });

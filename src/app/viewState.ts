@@ -19,7 +19,11 @@ export type ViewState = {
 const oneOf = <T extends string>(value: string | null, allowed: readonly T[], fallback: T): T =>
   allowed.includes(value as T) ? (value as T) : fallback;
 
-export function readViewState(search: string, maximumCatalogDistanceLy: number): ViewState {
+export function readViewState(
+  search: string,
+  maximumCatalogDistanceLy: number,
+  defaultLabelMode: LabelMode = 'all',
+): ViewState {
   const params = new URLSearchParams(search);
   const requestedDistance = Number(params.get('distance'));
   return {
@@ -30,7 +34,7 @@ export function readViewState(search: string, maximumCatalogDistanceLy: number):
         : maximumCatalogDistanceLy,
     unit: oneOf(params.get('unit'), ['ly', 'pc'], 'ly'),
     sort: oneOf(params.get('sort'), ['distance', 'name', 'magnitude'], 'distance'),
-    labels: oneOf(params.get('labels'), ['none', 'selected', 'prominent', 'all'], 'all'),
+    labels: oneOf(params.get('labels'), ['none', 'selected', 'prominent', 'all'], defaultLabelMode),
     markerMode: oneOf(params.get('markers'), ['clarity', 'brightness'], 'clarity'),
     stellarColors: params.get('colors') !== '0',
     selected: params.get('selected'),

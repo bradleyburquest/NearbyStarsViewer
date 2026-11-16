@@ -4,6 +4,10 @@ test('uses the release-ready viewer and selects a system', async ({ page }) => {
   await page.goto('/');
   await expect(page).toHaveTitle('NearbyStarsViewer');
   await expect(page.getByRole('heading', { name: 'NearbyStarsViewer' })).toBeVisible();
+  await expect(page.getByRole('switch', { name: 'Star labels' })).toHaveAttribute(
+    'aria-checked',
+    'true',
+  );
   await page.getByRole('button', { name: 'Help' }).click();
   await expect(page.getByRole('dialog', { name: 'Viewer help' })).toBeVisible();
   await page.keyboard.press('Escape');
@@ -39,8 +43,21 @@ test('uses the release-ready viewer and selects a system', async ({ page }) => {
 test('keeps the semantic catalog usable at a narrow viewport', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
-  await expect(page.getByRole('combobox', { name: 'Labels' })).toHaveValue('all');
+  await expect(page.getByRole('combobox', { name: 'Labels' })).toHaveValue('none');
   await expect(page.locator('canvas')).toBeVisible({ timeout: 15_000 });
+  const labelSwitch = page.getByRole('switch', { name: 'Star labels' });
+  await expect(labelSwitch).toHaveAttribute('aria-checked', 'false');
+  await expect(page.getByRole('button', { name: 'Select Sun' })).toBeVisible();
+  await expect
+    .poll(() =>
+      page
+        .locator('.star-label')
+        .evaluateAll((labels) => labels.filter((label) => !label.hidden).length),
+    )
+    .toBe(1);
+  await labelSwitch.click();
+  await expect(labelSwitch).toHaveAttribute('aria-checked', 'true');
+  await expect(page.getByRole('combobox', { name: 'Labels' })).toHaveValue('all');
   await expect
     .poll(() =>
       page
@@ -48,9 +65,8 @@ test('keeps the semantic catalog usable at a narrow viewport', async ({ page }) 
         .evaluateAll((labels) => labels.filter((label) => !label.hidden).length),
     )
     .toBe(151);
-  const labelSwitch = page.getByRole('switch', { name: 'Star labels' });
-  await expect(labelSwitch).toHaveAttribute('aria-checked', 'true');
   await page.getByRole('button', { name: 'Select Alpha Centauri' }).click({ force: true });
+  await page.getByRole('button', { name: 'Close details' }).click();
   await labelSwitch.click();
   await expect(page.getByRole('combobox', { name: 'Labels' })).toHaveValue('none');
   await expect(page.getByRole('button', { name: 'Select Sun' })).toBeVisible();
@@ -62,7 +78,6 @@ test('keeps the semantic catalog usable at a narrow viewport', async ({ page }) 
         .evaluateAll((labels) => labels.filter((label) => !label.hidden).length),
     )
     .toBe(2);
-  await page.getByRole('button', { name: 'Close details' }).click();
   await labelSwitch.click();
   await expect(labelSwitch).toHaveAttribute('aria-checked', 'true');
   await expect(page.getByRole('combobox', { name: 'Labels' })).toHaveValue('all');
