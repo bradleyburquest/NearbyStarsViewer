@@ -63,7 +63,10 @@ Astronomy enthusiasts, students, educators, and casual learners can understand t
 
 ### FR-7 Reference layers
 
-- Independently toggle constellation figures/labels, galactic plane, equatorial grid, ecliptic, and galactic grid.
+- Independently toggle constellation figures/labels, a local galactic-plane patch, equatorial grid, ecliptic, and galactic grid.
+- When the local galactic plane is shown, distinguish the Sun-centered nearby-star scale from the full Milky Way and show the Sun approximately 8.18 kpc from the Galactic center in an explicitly off-scale guide.
+- Draw a red, one-sided, labeled vector from the Sun toward the off-scale Galactic center; do not depict the center at the local plane patch's geometric center.
+- Rotate the top-down Milky Way position guide with the viewer's projected Galactic-center direction.
 - Layer visibility and opacity changes shall not recreate or reset the camera, orbit target, or selected system.
 - A selected spatial star label shall expand with light-year distance, spectral classification, constellation, equatorial coordinates, and apparent magnitude.
 - Adjust constellation and galactic-plane intensity.
@@ -71,7 +74,9 @@ Astronomy enthusiasts, students, educators, and casual learners can understand t
 
 ### FR-8 Motion
 
-- Toggle proper-motion arrows.
+- Toggle stellar proper-motion arrows together with the Sun's peculiar-motion vector relative to the local standard of rest.
+- Show the local Milky Way rotation vector only when the local galactic-plane reference layer is enabled.
+- Use distinct colors and labels for stellar proper motion, Galactic rotation, and solar motion.
 - Explain scale, unit, and epoch.
 - Do not present them as 3D velocity without radial-velocity support.
 

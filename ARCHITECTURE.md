@@ -51,11 +51,14 @@ Typed immutable models describe systems, components, exoplanets, measurements, p
 - Apply supported frame/epoch transformations.
 - Use the Sun as the fixed scene origin and supplemental selectable reference object.
 - Derive proper-motion direction from documented components.
+- Convert Galactic U/V/W vectors to the ICRS scene frame with the standard orthonormal Galactic-coordinate rotation. Render local Galactic +V from the scene origin in a group whose visibility follows the galactic-plane layer; render the Sun's published peculiar velocity in the proper-motion group.
 - Format angles, distances, velocities, magnitudes, and uncertainties.
 
 Use ICRS with a documented source epoch as the canonical representation. Scene space may use parsecs; presentation supports parsecs and light-years. Document axes and handedness.
 
 Constellation membership propagates catalog ICRS coordinates linearly to J2000 using proper motion, then applies the official IAU boundary lookup provided by Astronomy Engine. The separately rendered BSD-licensed Celestial Data figures cover all 88 constellations and must not be described as official boundaries.
+
+The galactic-plane scene layer is a local tangent patch centered on the Sun, not a model of the full Galactic disk. Its ICRS orientation is constructed from the orthonormal Galactic +U (center), +V (rotation), and +W (north pole) basis. A one-sided +U arrow indicates that the actual Galactic center lies far beyond the local patch. A separate CSS overlay provides an explicitly off-scale top-down context diagram placing the Sun about 8.18 kpc from the Galactic center; this avoids mixing the 25-light-year catalog scale with the kiloparsec-scale Galaxy.
 
 The generated CNS5 artifact remains exactly 150 validated records. The application prepends a separately maintained Sun reference object for display, search, labels, and selection without passing it through the inverse-parallax catalog schema.
 

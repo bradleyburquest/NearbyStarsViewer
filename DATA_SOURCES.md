@@ -50,3 +50,9 @@ The background line figures come from the [Celestial Data constellation-lines co
 Common display names are a small maintained mapping keyed by stable CNS5 identifiers. Catalog aliases remain searchable. Estimated marker colors use spectral type when present and Gaia G−RP otherwise; they are visualization aids, not calibrated rendered colors.
 
 An empty confirmed-planet array means no match exists in the dated archive snapshot; it is not evidence that the system has no planets.
+
+## Galactic motion reference vectors
+
+The motion overlay uses Galactic Cartesian components where +U points toward the Galactic center, +V follows local Galactic rotation, and +W points toward the north Galactic pole. The Milky Way rotation arrow is the unit +V direction at the Sun. The Sun arrow represents its peculiar velocity relative to the local standard of rest, using `(U, V, W) = (11.1, 12.24, 7.25) km/s` from Schönrich, Binney, and Dehnen (2010), [MNRAS 403, 1829](https://doi.org/10.1111/j.1365-2966.2010.16253.x). Both are transformed into the viewer's ICRS Cartesian frame with the standard orthonormal Galactic-coordinate rotation matrix. Arrow lengths are illustrative; the legend distinguishes these 3D reference directions from the catalog stars' angular proper-motion arrows.
+
+The separate Milky Way position guide uses a Sun-to-Galactic-center distance of 8.178 kpc (about 26,700 light-years), measured geometrically by the GRAVITY Collaboration from the orbit of S2 around Sagittarius A*: [A&A 625, L10 (2019)](https://doi.org/10.1051/0004-6361/201935656). The diagram is explicitly off-scale and contextual only; the 3D galactic-plane layer is a local tangent patch within the nearby-star scene.

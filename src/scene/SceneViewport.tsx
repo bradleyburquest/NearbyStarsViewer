@@ -10,6 +10,11 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { CSS2DObject, CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 import type { StellarSystem } from '../domain/catalog';
+import {
+  GALACTIC_CENTER_DIRECTION_ICRS,
+  MILKY_WAY_ROTATION_DIRECTION_ICRS,
+  SUN_PECULIAR_MOTION_DIRECTION_ICRS,
+} from '../domain/galacticMotion';
 import { properMotionDirection } from '../domain/motion';
 import type { LabelMode, MarkerMode } from '../services/catalogFilters';
 import { toSceneSystem } from './sceneModel';
@@ -72,6 +77,7 @@ type SceneRuntime = {
   selectionRing: THREE.Mesh<THREE.RingGeometry, THREE.MeshBasicMaterial>;
   referenceObjects: Record<ReferenceLayerKey, THREE.Object3D>;
   properMotionGroup: THREE.Group;
+  galacticRotationGroup: THREE.Group;
 };
 
 const DEFAULT_CAMERA_POSITION = new THREE.Vector3(5.8, -7.2, 4.6);
@@ -146,6 +152,25 @@ function createBackgroundStars(): THREE.Points<THREE.BufferGeometry, THREE.Point
   );
 }
 
+function addGlobalMotionVector(
+  group: THREE.Group,
+  direction: Readonly<{ x: number; y: number; z: number }>,
+  length: number,
+  color: number,
+  labelText: string,
+  labelClass: string,
+): void {
+  const vector = new THREE.Vector3(direction.x, direction.y, direction.z).normalize();
+  group.add(new THREE.ArrowHelper(vector, new THREE.Vector3(), length, color, 0.22, 0.11));
+
+  const label = document.createElement('span');
+  label.className = `motion-vector-label ${labelClass}`;
+  label.textContent = labelText;
+  const labelObject = new CSS2DObject(label);
+  labelObject.position.copy(vector).multiplyScalar(length + 0.16);
+  group.add(labelObject);
+}
+
 export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>(
   function SceneViewport(
     {
@@ -165,6 +190,7 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
     ref,
   ) {
     const containerRef = useRef<HTMLDivElement>(null);
+    const galaxyMapRef = useRef<HTMLDivElement>(null);
     const runtimeRef = useRef<SceneRuntime | null>(null);
     const onSelectRef = useRef(onSelectSystem);
     const onRevealRef = useRef(onRevealSystem);
@@ -247,6 +273,25 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
 
       const properMotionGroup = new THREE.Group();
       properMotionGroup.visible = properMotionRef.current;
+      const galacticRotationGroup = new THREE.Group();
+      galacticRotationGroup.visible = layersRef.current.galacticPlane;
+      addGlobalMotionVector(
+        galacticRotationGroup,
+        MILKY_WAY_ROTATION_DIRECTION_ICRS,
+        2.1,
+        0xe477ff,
+        'Milky Way rotation',
+        'motion-vector-label--galaxy',
+      );
+      scene.add(galacticRotationGroup);
+      addGlobalMotionVector(
+        properMotionGroup,
+        SUN_PECULIAR_MOTION_DIRECTION_ICRS,
+        1.7,
+        0xffb84d,
+        'Sun motion vs LSR',
+        'motion-vector-label--sun',
+      );
       scene.add(properMotionGroup);
 
       const backgroundStars = createBackgroundStars();
@@ -348,8 +393,26 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
       selectionRing.renderOrder = 10;
       scene.add(selectionRing);
 
+      const projectedOrigin = new THREE.Vector3();
+      const projectedGalacticCenter = new THREE.Vector3();
       const render = () => {
         if (selectionRing.visible) selectionRing.lookAt(camera.position);
+        const galaxyMap = galaxyMapRef.current;
+        if (galaxyMap) {
+          projectedOrigin.set(0, 0, 0).project(camera);
+          projectedGalacticCenter
+            .set(
+              GALACTIC_CENTER_DIRECTION_ICRS.x,
+              GALACTIC_CENTER_DIRECTION_ICRS.y,
+              GALACTIC_CENTER_DIRECTION_ICRS.z,
+            )
+            .project(camera);
+          const screenAngle = Math.atan2(
+            -(projectedGalacticCenter.y - projectedOrigin.y),
+            projectedGalacticCenter.x - projectedOrigin.x,
+          );
+          galaxyMap.style.setProperty('--galaxy-view-rotation', `${screenAngle - Math.PI}rad`);
+        }
         renderer.render(scene, camera);
         labelRenderer.render(scene, camera);
       };
@@ -458,6 +521,7 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
         selectionRing,
         referenceObjects,
         properMotionGroup,
+        galacticRotationGroup,
       };
       resize();
       const graphics = renderer.getContext();
@@ -490,6 +554,7 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
         sunHaloMaterial.dispose();
         Object.values(referenceObjects).forEach(disposeObject);
         disposeObject(properMotionGroup);
+        disposeObject(galacticRotationGroup);
         backgroundStars.geometry.dispose();
         backgroundStars.material.dispose();
         renderer.dispose();
@@ -502,6 +567,7 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
       const runtime = runtimeRef.current;
       if (!runtime) return;
       updateReferenceLayers(runtime.referenceObjects, layers, layerOpacity);
+      runtime.galacticRotationGroup.visible = layers.galacticPlane;
       runtime.render();
     }, [layerOpacity, layers]);
 
@@ -617,13 +683,38 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
           onKeyDown={onKeyDown}
           aria-label={`Interactive Sun-centered three-dimensional scene showing ${systems.length} stellar systems. Drag to orbit, scroll to zoom, use arrow keys to orbit, plus or minus to zoom, zero to reset, and F for fullscreen.`}
         >
+          {layers.galacticPlane && (
+            <aside className="galaxy-position-key" aria-label="Sun position in Milky Way">
+              <div ref={galaxyMapRef} className="galaxy-position-key__map" aria-hidden="true">
+                <span className="galaxy-position-key__ring galaxy-position-key__ring--outer" />
+                <span className="galaxy-position-key__ring galaxy-position-key__ring--inner" />
+                <span className="galaxy-position-key__center" />
+                <span className="galaxy-position-key__sun" />
+              </div>
+              <div>
+                <strong>Sun in the Milky Way</strong>
+                <span>≈ 8.18 kpc · 26,700 ly from center</span>
+                <small>Top-down guide · not to nearby-scene scale</small>
+              </div>
+            </aside>
+          )}
           <div className="axis-key" aria-hidden="true">
             <span>XY · celestial equator</span>
             <span>Z · north celestial pole</span>
           </div>
-          {showProperMotion && (
+          {(showProperMotion || layers.galacticPlane) && (
             <div className="motion-key">
-              Arrows: proper-motion direction · relative angular rate
+              {showProperMotion && (
+                <>
+                  <span className="motion-key__proper">
+                    Star proper motion · relative angular rate
+                  </span>
+                  <span className="motion-key__sun">Sun motion relative to LSR</span>
+                </>
+              )}
+              {layers.galacticPlane && (
+                <span className="motion-key__galaxy">Milky Way local rotation</span>
+              )}
             </div>
           )}
           {status === 'unavailable' && (

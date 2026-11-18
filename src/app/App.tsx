@@ -261,7 +261,7 @@ export function App() {
               {(
                 [
                   ['constellations', 'All constellation figures'],
-                  ['galacticPlane', 'Galactic plane'],
+                  ['galacticPlane', 'Local galactic plane'],
                   ['equatorialGrid', 'Equatorial grid'],
                   ['ecliptic', 'Ecliptic'],
                   ['galacticGrid', 'Galactic grid'],

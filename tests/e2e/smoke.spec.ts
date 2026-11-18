@@ -19,7 +19,10 @@ test('uses the release-ready viewer and selects a system', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Sun-centered scene' })).toBeVisible();
   await page.getByLabel('Equatorial grid').check();
   await page.getByLabel('Proper-motion vectors').check();
-  await expect(page.getByText(/Arrows: proper-motion direction/)).toBeVisible();
+  await expect(page.getByText(/Star proper motion/)).toBeVisible();
+  await expect(page.getByText('Milky Way local rotation')).toBeHidden();
+  await expect(page.getByText('Sun motion relative to LSR')).toBeVisible();
+  await expect(page.locator('.motion-vector-label')).toHaveCount(1);
   await page.getByRole('searchbox').fill('Alpha Centauri');
   await expect(page.getByText('1 of 151 systems shown')).toBeVisible();
   await page.getByRole('button', { name: /Alpha Centauri.*4.32 ly/ }).click();
@@ -158,15 +161,40 @@ test('preserves the scene while toggling layers and expands a selected star labe
     element.dataset.sceneInstance = 'preserve-me';
   });
 
-  await page.getByLabel('Galactic plane').check();
+  await page.getByLabel('Local galactic plane').check();
   await expect(canvas).toHaveAttribute('data-scene-instance', 'preserve-me');
-  await page.getByLabel('Galactic plane').uncheck();
+  await expect(page.getByLabel('Sun position in Milky Way')).toContainText('≈ 8.18 kpc');
+  await expect(page.getByLabel('Sun position in Milky Way')).toContainText(
+    'not to nearby-scene scale',
+  );
+  await expect(page.getByText(/Toward Galactic center · 26,700 ly/)).toBeVisible();
+  await expect(page.locator('.motion-vector-label--galaxy')).toBeVisible();
+  await expect(page.getByText('Milky Way local rotation')).toBeVisible();
+  const galaxyMap = page.locator('.galaxy-position-key__map');
+  const initialGalaxyTransform = await galaxyMap.evaluate(
+    (element) => getComputedStyle(element).transform,
+  );
+  await page.locator('.scene-canvas').focus();
+  await page.keyboard.press('ArrowLeft');
+  await expect
+    .poll(() => galaxyMap.evaluate((element) => getComputedStyle(element).transform))
+    .not.toBe(initialGalaxyTransform);
+  await page.getByLabel('Local galactic plane').uncheck();
+  await expect(page.getByLabel('Sun position in Milky Way')).toBeHidden();
+  await expect(page.getByText(/Toward Galactic center · 26,700 ly/)).toBeHidden();
+  await expect(page.locator('.motion-vector-label--galaxy')).toBeHidden();
   await expect(canvas).toHaveAttribute('data-scene-instance', 'preserve-me');
   await page.getByLabel('Equatorial grid').check();
   await page.getByLabel('Proper-motion vectors').check();
   await expect(canvas).toHaveAttribute('data-scene-instance', 'preserve-me');
+  await expect(page.locator('.motion-vector-label--galaxy')).toBeHidden();
+  await expect(page.locator('.motion-vector-label--sun')).toBeVisible();
+  await page.getByLabel('Proper-motion vectors').uncheck();
+  await expect(page.locator('.motion-vector-label--galaxy')).toBeHidden();
+  await expect(page.locator('.motion-vector-label--sun')).toBeHidden();
+  await page.getByLabel('Proper-motion vectors').check();
   await expect(page.getByLabel('Equatorial grid')).toBeChecked();
-  await expect(page.getByLabel('Galactic plane')).not.toBeChecked();
+  await expect(page.getByLabel('Local galactic plane')).not.toBeChecked();
 
   await page.getByRole('searchbox').fill('Barnard');
   await expect(page.getByText('1 of 151 systems shown')).toBeVisible();
