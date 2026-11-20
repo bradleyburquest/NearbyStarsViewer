@@ -65,6 +65,11 @@ type StarEntry = {
   prominent: boolean;
 };
 
+type CameraState = Readonly<{
+  position: THREE.Vector3;
+  target: THREE.Vector3;
+}>;
+
 type SceneRuntime = {
   camera: THREE.PerspectiveCamera;
   controls: OrbitControls;
@@ -192,6 +197,7 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
     const containerRef = useRef<HTMLDivElement>(null);
     const galaxyMapRef = useRef<HTMLDivElement>(null);
     const runtimeRef = useRef<SceneRuntime | null>(null);
+    const cameraStateRef = useRef<CameraState | null>(null);
     const onSelectRef = useRef(onSelectSystem);
     const onRevealRef = useRef(onRevealSystem);
     const labelModeRef = useRef(labelMode);
@@ -257,14 +263,14 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(48, 1, 0.05, 80);
       camera.up.set(0, 0, 1);
-      camera.position.copy(DEFAULT_CAMERA_POSITION);
+      camera.position.copy(cameraStateRef.current?.position ?? DEFAULT_CAMERA_POSITION);
 
       const controls = new OrbitControls(camera, renderer.domElement);
       controls.enableDamping = false;
       controls.enablePan = true;
       controls.minDistance = 1;
       controls.maxDistance = 24;
-      controls.target.set(0, 0, 0);
+      controls.target.copy(cameraStateRef.current?.target ?? new THREE.Vector3());
       controls.update();
 
       const referenceObjects = createReferenceLayerObjects(1);
@@ -397,6 +403,7 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
       const projectedGalacticCenter = new THREE.Vector3();
       const render = () => {
         if (selectionRing.visible) selectionRing.lookAt(camera.position);
+        container.dataset.cameraDistance = camera.position.distanceTo(controls.target).toFixed(6);
         const galaxyMap = galaxyMapRef.current;
         if (galaxyMap) {
           projectedOrigin.set(0, 0, 0).project(camera);
@@ -540,6 +547,10 @@ export const SceneViewport = forwardRef<SceneViewportHandle, SceneViewportProps>
 
       return () => {
         active = false;
+        cameraStateRef.current = {
+          position: camera.position.clone(),
+          target: controls.target.clone(),
+        };
         runtimeRef.current = null;
         resizeObserver.disconnect();
         controls.removeEventListener('change', render);

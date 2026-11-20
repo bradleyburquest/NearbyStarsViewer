@@ -84,6 +84,7 @@ Astronomy enthusiasts, students, educators, and casual learners can understand t
 
 - Enter/leave fullscreen where supported.
 - Resize correctly on fullscreen, resize, and device rotation.
+- Preserve the current camera zoom and orientation when catalog filters, including maximum distance, change the visible systems.
 - Remain usable in viewport-maximized form if fullscreen fails.
 
 ### FR-10 Preferences and sharing

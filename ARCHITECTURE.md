@@ -60,6 +60,8 @@ Constellation membership propagates catalog ICRS coordinates linearly to J2000 u
 
 The galactic-plane scene layer is a local tangent patch centered on the Sun, not a model of the full Galactic disk. Its ICRS orientation is constructed from the orthonormal Galactic +U (center), +V (rotation), and +W (north pole) basis. A one-sided +U arrow indicates that the actual Galactic center lies far beyond the local patch. A separate CSS overlay provides an explicitly off-scale top-down context diagram placing the Sun about 8.18 kpc from the Galactic center; this avoids mixing the 25-light-year catalog scale with the kiloparsec-scale Galaxy.
 
+Scene reconstruction caused by changes to the filtered system collection carries the camera position and OrbitControls target forward. Catalog filtering therefore updates scene contents without resetting zoom or orientation.
+
 The generated CNS5 artifact remains exactly 150 validated records. The application prepends a separately maintained Sun reference object for display, search, labels, and selection without passing it through the inverse-parallax catalog schema.
 
 ### Application state

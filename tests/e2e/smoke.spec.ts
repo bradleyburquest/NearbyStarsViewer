@@ -233,6 +233,26 @@ test('preserves the scene while toggling layers and expands a selected star labe
   await expect(page.getByRole('heading', { name: "Barnard's Star" })).toBeVisible();
 });
 
+test('preserves camera zoom when the maximum distance changes', async ({ page }) => {
+  await page.goto('/');
+  const scene = page.locator('.scene-canvas');
+  await expect(scene.locator('canvas')).toBeVisible({ timeout: 15_000 });
+
+  await scene.focus();
+  await page.keyboard.press('+');
+  await page.keyboard.press('+');
+  const zoomedDistance = await scene.getAttribute('data-camera-distance');
+  expect(zoomedDistance).not.toBeNull();
+
+  const slider = page.getByLabel('Maximum distance in ly');
+  await slider.evaluate((element: HTMLInputElement) => {
+    element.value = '10';
+    element.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+  await expect(page.getByText(/systems shown/).first()).toBeVisible();
+  await expect(scene).toHaveAttribute('data-camera-distance', zoomedDistance!);
+});
+
 test('scrolls both side panels when their content exceeds the viewport', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 500 });
   await page.goto('/');
