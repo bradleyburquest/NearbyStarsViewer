@@ -62,6 +62,8 @@ The galactic-plane scene layer is a local tangent patch centered on the Sun, not
 
 Scene reconstruction caused by changes to the filtered system collection carries the camera position and OrbitControls target forward. Catalog filtering therefore updates scene contents without resetting zoom or orientation.
 
+Sky-map providers are defined in a typed service that converts catalog ICRS coordinates into provider-specific HTTPS URLs. ESA Sky is the default; the selected provider is part of preferences and shareable view state. Coordinate links require no provider API credentials or runtime data fetch by the application.
+
 Maximum-distance input uses a responsive pending value and commits it on touch end, pointer release, keyboard release, or blur. Only the committed value filters the catalog and reconstructs the scene, bounding each continuous slider gesture to one graphics-resource turnover.
 
 The generated CNS5 artifact remains exactly 150 validated records. The application prepends a separately maintained Sun reference object for display, search, labels, and selection without passing it through the inverse-parallax catalog schema.

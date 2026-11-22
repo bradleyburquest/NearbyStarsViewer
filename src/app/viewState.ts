@@ -1,5 +1,10 @@
 import type { DistanceUnit, LabelMode, MarkerMode, SortMode } from '../services/catalogFilters';
 import type { ReferenceLayers } from '../scene/referenceLayers';
+import {
+  DEFAULT_SKY_MAP_PROVIDER,
+  isSkyMapProvider,
+  type SkyMapProvider,
+} from '../services/skyMapProviders';
 
 export type ViewState = {
   query: string;
@@ -14,6 +19,7 @@ export type ViewState = {
   layerOpacity: number;
   properMotion: boolean;
   planetHostsOnly: boolean;
+  skyMapProvider: SkyMapProvider;
 };
 
 const oneOf = <T extends string>(value: string | null, allowed: readonly T[], fallback: T): T =>
@@ -26,6 +32,7 @@ export function readViewState(
 ): ViewState {
   const params = new URLSearchParams(search);
   const requestedDistance = Number(params.get('distance'));
+  const requestedSkyMap = params.get('skyMap');
   return {
     query: params.get('q') ?? '',
     maximumDistanceLy:
@@ -48,6 +55,7 @@ export function readViewState(
     layerOpacity: Math.min(1, Math.max(0.1, Number(params.get('layerOpacity')) || 0.55)),
     properMotion: params.get('motion') === '1',
     planetHostsOnly: params.get('planetHosts') === '1',
+    skyMapProvider: isSkyMapProvider(requestedSkyMap) ? requestedSkyMap : DEFAULT_SKY_MAP_PROVIDER,
   };
 }
 
@@ -66,5 +74,6 @@ export function writeViewState(state: ViewState, maximumCatalogDistanceLy: numbe
   if (state.layerOpacity !== 0.55) params.set('layerOpacity', state.layerOpacity.toFixed(2));
   if (state.properMotion) params.set('motion', '1');
   if (state.planetHostsOnly) params.set('planetHosts', '1');
+  if (state.skyMapProvider !== DEFAULT_SKY_MAP_PROVIDER) params.set('skyMap', state.skyMapProvider);
   return `?${params.toString()}`;
 }

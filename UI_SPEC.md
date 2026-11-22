@@ -67,6 +67,8 @@ The Maximum distance value responds immediately while dragging. Catalog and scen
 
 ### Star display
 
+Provide a Default star map selector with ESA Sky (default), Aladin Lite, NASA SkyView, and WorldWide Telescope. Persist the selection locally and apply it immediately to coordinate links in the Selected System panel.
+
 Offer labels (all, prominent, selected only, or none), motion vectors (default off), apparent-brightness versus clarity modes, and spectral-class color with a legend. Place a compact Labels switch at the right of the “Sun-centered neighborhood” heading on all screen sizes; it toggles directly between all labels and none while the full label-mode selector remains available below. Labels default to all above 760 px and none at 760 px and below. The Sun's label is always visible. Every star clicked in the viewer is added to a session-only revealed-label set and remains labeled until the page is refreshed, including in none mode and after another star is selected. In none mode, clicking a star marker also expands its information dropdown; clicking elsewhere collapses the dropdown without hiding any revealed label. The Proper-motion vectors checkbox controls teal stellar angular-motion arrows and an amber Sun peculiar-motion arrow relative to the local standard of rest. The magenta local Milky Way rotation arrow is tied to the Local galactic plane reference layer and is visible only while that layer is enabled. Each global arrow starts at the Sun and has an anchored identifying label. Motion visibility must update in place without recreating the scene or altering unrelated reference-layer visibility. Selecting a star label opens an anchored dropdown below the stationary name with distance in light-years, spectral classification, constellation, right ascension and declination, and apparent Gaia G magnitude. Apparent magnitude is explicitly identified as Earth-observed brightness, with lower values being brighter; absolute magnitude is not shown in this compact UI. Clicking outside the label collapses the dropdown without clearing the selected system.
 
 ## 5. Star representation
@@ -85,7 +87,7 @@ Show available values in this order:
 
 1. Common name and primary catalog ID
 2. Distance in light-years and parsecs
-3. RA/declination with frame and epoch
+3. RA/declination with frame and epoch; make both coordinate values links to the selected default sky-map provider, centered on the system with a surrounding sky field; place a standard copy icon on the Dec row aligned to the right edge of the panel that copies `RA, Dec` in decimal degrees and reports success or failure accessibly
 4. Spectral and luminosity class
 5. Apparent and absolute magnitude
 6. Estimated radius, mass, temperature, luminosity

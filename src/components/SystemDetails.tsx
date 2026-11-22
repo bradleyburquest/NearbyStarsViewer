@@ -2,11 +2,13 @@ import { useState } from 'react';
 import type { StellarSystem } from '../domain/catalog';
 import { solarPlanetNames } from '../data/sunSystem';
 import { getSystemWikipediaArticleUrl, getWikipediaArticleUrl } from '../data/wikipediaArticles';
+import { getSkyMapUrl, type SkyMapProvider } from '../services/skyMapProviders';
 
 type SystemDetailsProps = Readonly<{
   system: StellarSystem;
   onClose: () => void;
   onFocus: () => void;
+  skyMapProvider: SkyMapProvider;
 }>;
 
 function formatSigned(value: number, digits = 4): string {
@@ -19,6 +21,28 @@ function formatUncertainty(uncertainty: number | undefined, digits = 2): string 
 
 function formatOptional(value: number | undefined, suffix: string, digits = 2): string {
   return value === undefined ? 'Not available' : `${value.toFixed(digits)} ${suffix}`;
+}
+
+async function copyText(text: string): Promise<void> {
+  if (navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return;
+    } catch {
+      // HTTP deployments may expose the API but reject writes; use the fallback below.
+    }
+  }
+
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.setAttribute('readonly', '');
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  document.body.append(textarea);
+  textarea.select();
+  const copied = document.execCommand('copy');
+  textarea.remove();
+  if (!copied) throw new Error('Clipboard copy was rejected.');
 }
 
 function PlanetName({ name }: Readonly<{ name: string }>) {
@@ -89,13 +113,37 @@ function DataHelpTerm({ id, label, help }: DataHelpTermProps) {
   );
 }
 
-export function SystemDetails({ system, onClose, onFocus }: SystemDetailsProps) {
+export function SystemDetails({ system, onClose, onFocus, skyMapProvider }: SystemDetailsProps) {
   const isSun = system.id === 'sun';
+  const [coordinateCopyResult, setCoordinateCopyResult] = useState<Readonly<{
+    systemId: string;
+    state: 'copied' | 'error';
+  }> | null>(null);
+  const coordinateCopyState =
+    coordinateCopyResult?.systemId === system.id ? coordinateCopyResult.state : 'idle';
   const systemWikipediaUrl = getSystemWikipediaArticleUrl(system.displayName);
+  const skyMapUrl = isSun
+    ? null
+    : getSkyMapUrl(
+        skyMapProvider,
+        system.astrometry.raDeg.value,
+        system.astrometry.decDeg.value,
+        system.displayName,
+      );
   const properMotionTotal = Math.hypot(
     system.astrometry.properMotionRaMasYr.value,
     system.astrometry.properMotionDecMasYr.value,
   );
+
+  const copyCoordinates = async () => {
+    const coordinates = `${system.astrometry.raDeg.value.toFixed(8)}, ${system.astrometry.decDeg.value.toFixed(8)}`;
+    try {
+      await copyText(coordinates);
+      setCoordinateCopyResult({ systemId: system.id, state: 'copied' });
+    } catch {
+      setCoordinateCopyResult({ systemId: system.id, state: 'error' });
+    }
+  };
 
   return (
     <aside className="details-panel" aria-labelledby="details-title">
@@ -167,8 +215,48 @@ export function SystemDetails({ system, onClose, onFocus }: SystemDetailsProps) 
             <dd>Cartesian origin (0, 0, 0)</dd>
           ) : (
             <>
-              <dd>RA {system.astrometry.raDeg.value.toFixed(5)}°</dd>
-              <dd>Dec {formatSigned(system.astrometry.decDeg.value, 5)}°</dd>
+              <dd>
+                <a
+                  className="sky-map-link"
+                  href={skyMapUrl ?? undefined}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`Open a sky map centered on ${system.displayName} at right ascension ${system.astrometry.raDeg.value.toFixed(5)} degrees (opens in a new tab)`}
+                >
+                  RA {system.astrometry.raDeg.value.toFixed(5)}°
+                </a>
+              </dd>
+              <dd className="coordinate-copy-row">
+                <a
+                  className="sky-map-link"
+                  href={skyMapUrl ?? undefined}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`Open a sky map centered on ${system.displayName} at declination ${formatSigned(system.astrometry.decDeg.value, 5)} degrees (opens in a new tab)`}
+                >
+                  Dec {formatSigned(system.astrometry.decDeg.value, 5)}°
+                </a>
+                <button
+                  className="coordinate-copy-button"
+                  type="button"
+                  onClick={() => void copyCoordinates()}
+                  aria-label={`Copy right ascension and declination for ${system.displayName}`}
+                  title="Copy RA and Dec"
+                  data-state={coordinateCopyState}
+                >
+                  <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18">
+                    <rect x="8" y="8" width="11" height="11" rx="2" />
+                    <path d="M16 8V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h1" />
+                  </svg>
+                </button>
+                <span className="sr-only" role="status" aria-live="polite">
+                  {coordinateCopyState === 'copied'
+                    ? 'Coordinates copied'
+                    : coordinateCopyState === 'error'
+                      ? 'Copy failed'
+                      : ''}
+                </span>
+              </dd>
             </>
           )}
         </div>

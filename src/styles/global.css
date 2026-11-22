@@ -890,6 +890,64 @@ h2 {
   text-decoration-color: currentColor;
 }
 
+.sky-map-link {
+  color: #8fd5ff;
+  text-decoration-color: rgb(143 213 255 / 45%);
+  text-underline-offset: 3px;
+}
+
+.sky-map-link:hover,
+.sky-map-link:focus-visible {
+  color: #c3eaff;
+  text-decoration-color: currentColor;
+}
+
+.coordinate-copy-row {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 8px;
+}
+
+.coordinate-copy-button {
+  display: inline-grid;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 auto;
+  place-items: center;
+  padding: 0;
+  border: 1px solid #31546e;
+  border-radius: 6px;
+  color: #b9ddf3;
+  background: #102639;
+  margin-left: auto;
+  cursor: pointer;
+}
+
+.coordinate-copy-button svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.coordinate-copy-button:hover,
+.coordinate-copy-button:focus-visible {
+  border-color: #6cb9e7;
+  color: #e4f5ff;
+}
+
+.coordinate-copy-button[data-state='copied'] {
+  border-color: #59c9a5;
+  color: #8ce2c7;
+}
+
+.coordinate-copy-button[data-state='error'] {
+  border-color: #e27c70;
+  color: #ffb4a9;
+}
+
 .details-heading p:last-child {
   margin-bottom: 0;
   color: #6e8ba5;

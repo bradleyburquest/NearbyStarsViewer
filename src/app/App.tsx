@@ -15,6 +15,7 @@ import {
 } from '../services/catalogFilters';
 import { readViewState, writeViewState } from './viewState';
 import { readPreferences, writePreferences } from './preferences';
+import { SKY_MAP_PROVIDERS, type SkyMapProvider } from '../services/skyMapProviders';
 
 const SceneViewport = lazy(() =>
   import('../scene/SceneViewport').then((module) => ({ default: module.SceneViewport })),
@@ -54,6 +55,7 @@ export function App() {
   const [layerOpacity, setLayerOpacity] = useState(initial.layerOpacity);
   const [properMotion, setProperMotion] = useState(initial.properMotion);
   const [planetHostsOnly, setPlanetHostsOnly] = useState(initial.planetHostsOnly);
+  const [skyMapProvider, setSkyMapProvider] = useState(initial.skyMapProvider);
   const [helpOpen, setHelpOpen] = useState(false);
   const [sceneDiagnostics, setSceneDiagnostics] = useState<SceneDiagnostics | null>(null);
   const visibleSystems = useMemo(
@@ -80,6 +82,7 @@ export function App() {
         layerOpacity,
         properMotion,
         planetHostsOnly,
+        skyMapProvider,
       },
       catalogMaximumLy,
     );
@@ -92,6 +95,7 @@ export function App() {
     maximumDistanceLy,
     properMotion,
     planetHostsOnly,
+    skyMapProvider,
     query,
     selectedSystem,
     sort,
@@ -109,6 +113,7 @@ export function App() {
       layerOpacity,
       properMotion,
       planetHostsOnly,
+      skyMapProvider,
     });
   }, [
     labels,
@@ -117,6 +122,7 @@ export function App() {
     markerMode,
     planetHostsOnly,
     properMotion,
+    skyMapProvider,
     stellarColors,
     unit,
   ]);
@@ -257,6 +263,19 @@ export function App() {
                   <option value="brightness">By brightness</option>
                 </select>
               </label>
+              <label>
+                Default star map
+                <select
+                  value={skyMapProvider}
+                  onChange={(event) => setSkyMapProvider(event.target.value as SkyMapProvider)}
+                >
+                  {SKY_MAP_PROVIDERS.map((provider) => (
+                    <option key={provider.id} value={provider.id}>
+                      {provider.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
             </div>
             <label className="check-control">
               <input
@@ -391,6 +410,7 @@ export function App() {
             system={selectedSystem}
             onClose={() => setSelectedSystemId(null)}
             onFocus={() => sceneRef.current?.focusSystem(selectedSystem.id)}
+            skyMapProvider={skyMapProvider}
           />
         )}
       </section>

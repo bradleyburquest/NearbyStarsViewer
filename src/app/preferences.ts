@@ -1,7 +1,8 @@
 import type { ViewState } from './viewState';
+import { isSkyMapProvider } from '../services/skyMapProviders';
 
 const STORAGE_KEY = 'nearby-stars-viewer:preferences:v1';
-const CURRENT_VERSION = 3;
+const CURRENT_VERSION = 4;
 
 export type Preferences = Pick<
   ViewState,
@@ -13,6 +14,7 @@ export type Preferences = Pick<
   | 'layerOpacity'
   | 'properMotion'
   | 'planetHostsOnly'
+  | 'skyMapProvider'
 >;
 
 export function readPreferences(storage: Storage | undefined): Partial<Preferences> {
@@ -21,8 +23,7 @@ export function readPreferences(storage: Storage | undefined): Partial<Preferenc
     const parsed: unknown = JSON.parse(storage.getItem(STORAGE_KEY) ?? 'null');
     if (!parsed || typeof parsed !== 'object' || !('version' in parsed)) return {};
     const candidate = parsed as { version: unknown; preferences?: unknown };
-    if (candidate.version !== 1 && candidate.version !== 2 && candidate.version !== CURRENT_VERSION)
-      return {};
+    if (![1, 2, 3, CURRENT_VERSION].includes(candidate.version as number)) return {};
     if (!candidate.preferences || typeof candidate.preferences !== 'object') return {};
     const value = candidate.preferences as Record<string, unknown>;
     const result: Partial<Preferences> = {};
@@ -47,6 +48,7 @@ export function readPreferences(storage: Storage | undefined): Partial<Preferenc
       result.layerOpacity = value.layerOpacity;
     if (typeof value.properMotion === 'boolean') result.properMotion = value.properMotion;
     if (typeof value.planetHostsOnly === 'boolean') result.planetHostsOnly = value.planetHostsOnly;
+    if (isSkyMapProvider(value.skyMapProvider)) result.skyMapProvider = value.skyMapProvider;
     if (value.layers && typeof value.layers === 'object') {
       const layers = value.layers as Record<string, unknown>;
       if (

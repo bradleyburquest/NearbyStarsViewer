@@ -9,6 +9,7 @@ const preferences: Preferences = {
   layerOpacity: 0.7,
   properMotion: true,
   planetHostsOnly: true,
+  skyMapProvider: 'nasa-skyview',
   layers: {
     constellations: true,
     galacticPlane: false,

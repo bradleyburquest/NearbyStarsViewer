@@ -1,6 +1,16 @@
 import { expect, test } from '@playwright/test';
 
 test('uses the release-ready viewer and selects a system', async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, 'clipboard', {
+      configurable: true,
+      value: {
+        writeText: async (text: string) => {
+          document.documentElement.dataset.copiedCoordinates = text;
+        },
+      },
+    });
+  });
   await page.goto('/');
   await expect(page).toHaveTitle('Nearby Stars Viewer');
   await expect(page.getByRole('heading', { name: 'Nearby Stars Viewer' })).toBeVisible();
@@ -35,6 +45,44 @@ test('uses the release-ready viewer and selects a system', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Exoplanets · 2' })).toBeVisible();
   await expect(page.getByText('Proxima Cen b')).toBeVisible();
   await expect(page.locator('.details-panel').getByText('Centaurus (Cen)')).toBeVisible();
+  const raSkyMapLink = page.getByRole('link', {
+    name: /sky map centered on Alpha Centauri at right ascension/i,
+  });
+  const decSkyMapLink = page.getByRole('link', {
+    name: /sky map centered on Alpha Centauri at declination/i,
+  });
+  await expect(raSkyMapLink).toHaveAttribute(
+    'href',
+    'https://sky.esa.int/esasky/?target=219.9204081301028+-60.83514521897498&fov=0.5&cooframe=J2000&sci=true',
+  );
+  await expect(decSkyMapLink).toHaveAttribute('href', await raSkyMapLink.getAttribute('href'));
+  const copyCoordinatesButton = page.getByRole('button', {
+    name: 'Copy right ascension and declination for Alpha Centauri',
+  });
+  const coordinateSection = copyCoordinatesButton.locator('xpath=ancestor::div[1]');
+  const coordinateSectionBox = await coordinateSection.boundingBox();
+  const copyButtonBox = await copyCoordinatesButton.boundingBox();
+  expect((coordinateSectionBox?.x ?? 0) + (coordinateSectionBox?.width ?? 0)).toBeCloseTo(
+    (copyButtonBox?.x ?? 0) + (copyButtonBox?.width ?? 0) + 12,
+    0,
+  );
+  await copyCoordinatesButton.click();
+  await expect(page.getByRole('status').filter({ hasText: 'Coordinates copied' })).toHaveText(
+    'Coordinates copied',
+  );
+  await expect(page.getByRole('button', { name: /Copy right ascension/ })).toHaveAttribute(
+    'data-state',
+    'copied',
+  );
+  await expect(page.locator('html')).toHaveAttribute(
+    'data-copied-coordinates',
+    '219.92040813, -60.83514522',
+  );
+  await page.getByLabel('Default star map').selectOption('nasa-skyview');
+  await expect(raSkyMapLink).toHaveAttribute(
+    'href',
+    'https://skyview.gsfc.nasa.gov/cgi-bin/images?Position=219.9204081301028%2C-60.83514521897498&Survey=DSS2+Red&Coordinates=J2000&Size=0.5&Pixels=600&Return=JPEG',
+  );
   await page.getByRole('button', { name: 'Focus in scene' }).click();
   await page.getByRole('button', { name: 'Reset view' }).click();
   await page.goto('/');
