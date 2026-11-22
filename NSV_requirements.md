@@ -1,6 +1,6 @@
-# NearbyStarsViewer  
+# Nearby Stars Viewer  
   
-I want you to create a NearbyStarsViewer application. The application will have the following requirements and features.   
+I want you to create a Nearby Stars Viewer application. The application will have the following requirements and features.   
   
 1. Run in Chrome, Safari, DuckDuckGo, Firefox.  
 2. Create a 3-d application that allows the user to view the 150 closest stars to our sun.  

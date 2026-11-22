@@ -40,6 +40,9 @@ export function App() {
   const helpCloseRef = useRef<HTMLButtonElement>(null);
   const [query, setQuery] = useState(initial.query);
   const [maximumDistanceLy, setMaximumDistanceLy] = useState(initial.maximumDistanceLy);
+  const [pendingMaximumDistanceLy, setPendingMaximumDistanceLy] = useState(
+    initial.maximumDistanceLy,
+  );
   const [unit, setUnit] = useState<DistanceUnit>(initial.unit);
   const [sort, setSort] = useState<SortMode>(initial.sort);
   const [labels, setLabels] = useState<LabelMode>(initial.labels);
@@ -58,7 +61,8 @@ export function App() {
     [maximumDistanceLy, planetHostsOnly, query, sort],
   );
   const selectedSystem = visibleSystems.find((system) => system.id === selectedSystemId) ?? null;
-  const displayCutoff = unit === 'ly' ? maximumDistanceLy : maximumDistanceLy / 3.261563777;
+  const displayCutoff =
+    unit === 'ly' ? pendingMaximumDistanceLy : pendingMaximumDistanceLy / 3.261563777;
   const displayMaximum = unit === 'ly' ? catalogMaximumLy : catalogMaximumLy / 3.261563777;
 
   useEffect(() => {
@@ -133,10 +137,12 @@ export function App() {
     if (helpOpen) helpCloseRef.current?.focus();
   }, [helpOpen]);
 
+  const displayCutoffInLightYears = (value: number) =>
+    Math.min(catalogMaximumLy, Math.max(1, unit === 'ly' ? value : value * 3.261563777));
   const setDisplayCutoff = (value: number) =>
-    setMaximumDistanceLy(
-      Math.min(catalogMaximumLy, Math.max(1, unit === 'ly' ? value : value * 3.261563777)),
-    );
+    setPendingMaximumDistanceLy(displayCutoffInLightYears(value));
+  const commitDisplayCutoff = (value: number) =>
+    setMaximumDistanceLy(displayCutoffInLightYears(value));
   const toggleLayer = (key: ReferenceLayerKey) =>
     setLayers((current) => ({ ...current, [key]: !current[key] }));
 
@@ -149,7 +155,7 @@ export function App() {
         <div className="brand">
           <span className="brand-mark" aria-hidden="true" />
           <div>
-            <h1>NearbyStarsViewer</h1>
+            <h1>Nearby Stars Viewer</h1>
             <p>Local stellar neighborhood</p>
           </div>
         </div>
@@ -202,6 +208,10 @@ export function App() {
                   step="0.1"
                   value={displayCutoff}
                   onChange={(event) => setDisplayCutoff(event.target.valueAsNumber)}
+                  onTouchEnd={(event) => commitDisplayCutoff(event.currentTarget.valueAsNumber)}
+                  onPointerUp={(event) => commitDisplayCutoff(event.currentTarget.valueAsNumber)}
+                  onKeyUp={(event) => commitDisplayCutoff(event.currentTarget.valueAsNumber)}
+                  onBlur={(event) => commitDisplayCutoff(event.currentTarget.valueAsNumber)}
                 />
                 <output>{displayCutoff.toFixed(1)}</output>
               </div>

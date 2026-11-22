@@ -37,7 +37,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     }
     return (
       <main className="fatal-error" role="alert">
-        <h1>NearbyStarsViewer could not start</h1>
+        <h1>Nearby Stars Viewer could not start</h1>
         <p>Reload the page. If the problem continues, rebuild the catalog and application.</p>
         <button className="primary-button" type="button" onClick={() => window.location.reload()}>
           Reload application

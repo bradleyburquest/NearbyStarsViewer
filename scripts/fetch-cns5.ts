@@ -306,7 +306,7 @@ const catalog = stellarCatalogSchema.parse({
   schemaVersion: '4.0.0',
   catalogVersion: 'cns5-gavo-2023-09-04-nearest-150-v3-constellations',
   generatedAt: new Date().toISOString(),
-  title: 'NearbyStarsViewer nearest 150 stellar systems',
+  title: 'Nearby Stars Viewer nearest 150 stellar systems',
   description: 'The 150 nearest distinct stellar systems selected reproducibly from CNS5.',
   selectionPolicy:
     'CNS5 rows with trigonometric parallax, retaining single objects and flagged system primaries; sorted by descending parallax and limited to 150 systems.',
@@ -335,8 +335,8 @@ const catalog = stellarCatalogSchema.parse({
     },
     {
       id: 'derived-absolute-magnitude',
-      title: 'NearbyStarsViewer absolute Gaia G magnitude derivation',
-      publisher: 'NearbyStarsViewer',
+      title: 'Nearby Stars Viewer absolute Gaia G magnitude derivation',
+      publisher: 'Nearby Stars Viewer',
       catalogVersion: '3.0.0',
       url: 'https://github.com/bradleyburquest/NearbyStarsViewer',
       retrievedAt: today,
@@ -356,8 +356,8 @@ const catalog = stellarCatalogSchema.parse({
     },
     {
       id: 'derived-inverse-parallax',
-      title: 'NearbyStarsViewer inverse-parallax distance derivation',
-      publisher: 'NearbyStarsViewer',
+      title: 'Nearby Stars Viewer inverse-parallax distance derivation',
+      publisher: 'Nearby Stars Viewer',
       catalogVersion: '2.0.0',
       url: 'https://github.com/bradleyburquest/NearbyStarsViewer',
       retrievedAt: today,

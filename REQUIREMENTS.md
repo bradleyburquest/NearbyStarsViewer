@@ -1,8 +1,8 @@
-# NearbyStarsViewer Requirements
+# Nearby Stars Viewer Requirements
 
 ## 1. Product summary
 
-NearbyStarsViewer is a web application for exploring the 150 cataloged stellar systems closest to the Sun in three dimensions. The selectable Sun reference object brings the displayed total to 151 systems.
+Nearby Stars Viewer is a web application for exploring the 150 cataloged stellar systems closest to the Sun in three dimensions. The selectable Sun reference object brings the displayed total to 151 systems.
 
 This normalizes `NSV_requirements.md`. “Must” is initial-release scope; “should” is desirable after the first complete vertical slice.
 
@@ -85,6 +85,7 @@ Astronomy enthusiasts, students, educators, and casual learners can understand t
 - Enter/leave fullscreen where supported.
 - Resize correctly on fullscreen, resize, and device rotation.
 - Preserve the current camera zoom and orientation when catalog filters, including maximum distance, change the visible systems.
+- Defer Maximum distance filtering until touch or pointer release so each slider gesture causes only one resource-intensive scene update, reducing mobile WebGL context exhaustion.
 - Remain usable in viewport-maximized form if fullscreen fails.
 
 ### FR-10 Preferences and sharing

@@ -1,4 +1,4 @@
-# NearbyStarsViewer Data Sources
+# Nearby Stars Viewer Data Sources
 
 ## Phase 4 catalog
 

@@ -14,7 +14,7 @@ describe('App', () => {
 
   it('renders Phase 7 scientific details and filters planet hosts', () => {
     render(<App />);
-    expect(screen.getByRole('heading', { name: 'NearbyStarsViewer' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Nearby Stars Viewer' })).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Help' }));
     expect(screen.getByRole('dialog', { name: 'Viewer help' })).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Close help' }));

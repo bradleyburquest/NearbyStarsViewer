@@ -1,4 +1,4 @@
-# NearbyStarsViewer UI Specification
+# Nearby Stars Viewer UI Specification
 
 ## 1. Experience goals
 
@@ -62,6 +62,8 @@ The constellation overlay contains J2000 line figures for all 88 IAU constellati
 Independently toggle all constellation lines/labels, local galactic-plane patch, equatorial grid, ecliptic, and galactic grid. The local plane is a square, labeled neighborhood patch rather than a Sun-centered representation of the full Galactic disk. Draw a red, one-sided vector from the Sun toward Galactic longitude 0°, extending toward the patch edge and labeled “Toward Galactic center · 26,700 ly · off-scale”; the Galactic center must not be drawn at the patch center. When enabled, also show a compact top-down Milky Way guide that offsets the Sun from the center, states its approximate 8.18 kpc (26,700 ly) Galactocentric distance, and explicitly says the guide is not to the nearby-scene scale. Rotate this top-down galaxy diagram with the viewer so its center-to-Sun axis remains aligned with the projected Galactic-center direction as the camera orbits. Toggling a layer or changing its opacity updates the existing scene in place and must preserve the camera, orbit target, and selection. Background layers expose 0–100% opacity; defaults remain subordinate to stars.
 
 Changing catalog filters, including the Maximum distance slider, must preserve the current camera position, orbit target, orientation, and zoom while the visible star set updates.
+
+The Maximum distance value responds immediately while dragging. Catalog and scene results update on touch or pointer release; keyboard changes update on key release, with blur as a fallback. A continuous gesture must not repeatedly reconstruct the WebGL scene on memory-constrained mobile devices.
 
 ### Star display
 

@@ -2,7 +2,7 @@
 
 ## Project purpose
 
-NearbyStarsViewer is a browser-based interactive 3D visualization of the 150 stellar systems closest to the Sun. It should make nearby stellar data understandable without sacrificing astronomical correctness.
+Nearby Stars Viewer is a browser-based interactive 3D visualization of the 150 stellar systems closest to the Sun. It should make nearby stellar data understandable without sacrificing astronomical correctness.
 
 ## Source of truth
 

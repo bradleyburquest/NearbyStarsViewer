@@ -2,8 +2,8 @@ import { expect, test } from '@playwright/test';
 
 test('uses the release-ready viewer and selects a system', async ({ page }) => {
   await page.goto('/');
-  await expect(page).toHaveTitle('NearbyStarsViewer');
-  await expect(page.getByRole('heading', { name: 'NearbyStarsViewer' })).toBeVisible();
+  await expect(page).toHaveTitle('Nearby Stars Viewer');
+  await expect(page.getByRole('heading', { name: 'Nearby Stars Viewer' })).toBeVisible();
   await expect(page.getByRole('switch', { name: 'Star labels' })).toHaveAttribute(
     'aria-checked',
     'true',
@@ -249,8 +249,33 @@ test('preserves camera zoom when the maximum distance changes', async ({ page })
     element.value = '10';
     element.dispatchEvent(new Event('input', { bubbles: true }));
   });
+  await slider.dispatchEvent('pointerup');
   await expect(page.getByText(/systems shown/).first()).toBeVisible();
   await expect(scene).toHaveAttribute('data-camera-distance', zoomedDistance!);
+});
+
+test('commits rapid maximum-distance changes on touch end', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+  const scene = page.locator('.scene-canvas');
+  const canvas = scene.locator('canvas');
+  await expect(canvas).toBeVisible({ timeout: 15_000 });
+  await canvas.evaluate((element) => {
+    element.dataset.sceneInstance = 'mobile-slider';
+  });
+
+  const slider = page.getByLabel('Maximum distance in ly');
+  for (const value of ['24', '20', '16', '12', '10']) await slider.fill(value);
+
+  await expect(slider).toHaveValue('10');
+  await page.waitForTimeout(500);
+  await expect(canvas).toHaveAttribute('data-scene-instance', 'mobile-slider');
+  await slider.dispatchEvent('touchend');
+  await expect
+    .poll(() => page.locator('canvas[data-scene-instance="mobile-slider"]').count())
+    .toBe(0);
+  await expect.poll(() => page.locator('canvas').count()).toBe(1);
+  await expect(page.locator('canvas')).toBeVisible();
 });
 
 test('scrolls both side panels when their content exceeds the viewport', async ({ page }) => {
