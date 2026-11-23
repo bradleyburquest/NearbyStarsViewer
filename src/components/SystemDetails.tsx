@@ -3,6 +3,11 @@ import type { StellarSystem } from '../domain/catalog';
 import { solarPlanetNames } from '../data/sunSystem';
 import { getSystemWikipediaArticleUrl, getWikipediaArticleUrl } from '../data/wikipediaArticles';
 import { getSkyMapUrl, type SkyMapProvider } from '../services/skyMapProviders';
+import {
+  COORDINATE_FORMATS,
+  formatCoordinates,
+  type CoordinateFormat,
+} from '../services/coordinateFormats';
 
 type SystemDetailsProps = Readonly<{
   system: StellarSystem;
@@ -115,12 +120,18 @@ function DataHelpTerm({ id, label, help }: DataHelpTermProps) {
 
 export function SystemDetails({ system, onClose, onFocus, skyMapProvider }: SystemDetailsProps) {
   const isSun = system.id === 'sun';
+  const [coordinateFormat, setCoordinateFormat] = useState<CoordinateFormat>('decimal-degrees');
   const [coordinateCopyResult, setCoordinateCopyResult] = useState<Readonly<{
     systemId: string;
     state: 'copied' | 'error';
   }> | null>(null);
   const coordinateCopyState =
     coordinateCopyResult?.systemId === system.id ? coordinateCopyResult.state : 'idle';
+  const formattedCoordinates = formatCoordinates(
+    system.astrometry.raDeg.value,
+    system.astrometry.decDeg.value,
+    coordinateFormat,
+  );
   const systemWikipediaUrl = getSystemWikipediaArticleUrl(system.displayName);
   const skyMapUrl = isSun
     ? null
@@ -136,9 +147,8 @@ export function SystemDetails({ system, onClose, onFocus, skyMapProvider }: Syst
   );
 
   const copyCoordinates = async () => {
-    const coordinates = `${system.astrometry.raDeg.value.toFixed(8)}, ${system.astrometry.decDeg.value.toFixed(8)}`;
     try {
-      await copyText(coordinates);
+      await copyText(formattedCoordinates.copy);
       setCoordinateCopyResult({ systemId: system.id, state: 'copied' });
     } catch {
       setCoordinateCopyResult({ systemId: system.id, state: 'error' });
@@ -223,7 +233,7 @@ export function SystemDetails({ system, onClose, onFocus, skyMapProvider }: Syst
                   rel="noreferrer"
                   aria-label={`Open a sky map centered on ${system.displayName} at right ascension ${system.astrometry.raDeg.value.toFixed(5)} degrees (opens in a new tab)`}
                 >
-                  RA {system.astrometry.raDeg.value.toFixed(5)}°
+                  RA {formattedCoordinates.ra}
                 </a>
               </dd>
               <dd className="coordinate-copy-row">
@@ -234,21 +244,38 @@ export function SystemDetails({ system, onClose, onFocus, skyMapProvider }: Syst
                   rel="noreferrer"
                   aria-label={`Open a sky map centered on ${system.displayName} at declination ${formatSigned(system.astrometry.decDeg.value, 5)} degrees (opens in a new tab)`}
                 >
-                  Dec {formatSigned(system.astrometry.decDeg.value, 5)}°
+                  Dec {formattedCoordinates.dec}
                 </a>
-                <button
-                  className="coordinate-copy-button"
-                  type="button"
-                  onClick={() => void copyCoordinates()}
-                  aria-label={`Copy right ascension and declination for ${system.displayName}`}
-                  title="Copy RA and Dec"
-                  data-state={coordinateCopyState}
-                >
-                  <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18">
-                    <rect x="8" y="8" width="11" height="11" rx="2" />
-                    <path d="M16 8V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h1" />
-                  </svg>
-                </button>
+                <span className="coordinate-actions">
+                  <select
+                    className="coordinate-format-select"
+                    aria-label="Coordinate format"
+                    value={coordinateFormat}
+                    onChange={(event) => {
+                      setCoordinateFormat(event.target.value as CoordinateFormat);
+                      setCoordinateCopyResult(null);
+                    }}
+                  >
+                    {COORDINATE_FORMATS.map((format) => (
+                      <option key={format.id} value={format.id}>
+                        {format.label}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    className="coordinate-copy-button"
+                    type="button"
+                    onClick={() => void copyCoordinates()}
+                    aria-label={`Copy right ascension and declination for ${system.displayName}`}
+                    title="Copy RA and Dec"
+                    data-state={coordinateCopyState}
+                  >
+                    <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18">
+                      <rect x="8" y="8" width="11" height="11" rx="2" />
+                      <path d="M16 8V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h1" />
+                    </svg>
+                  </button>
+                </span>
                 <span className="sr-only" role="status" aria-live="polite">
                   {coordinateCopyState === 'copied'
                     ? 'Coordinates copied'

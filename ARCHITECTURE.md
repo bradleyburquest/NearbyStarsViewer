@@ -64,6 +64,8 @@ Scene reconstruction caused by changes to the filtered system collection carries
 
 Sky-map providers are defined in a typed service that converts catalog ICRS coordinates into provider-specific HTTPS URLs. ESA Sky is the default; the selected provider is part of preferences and shareable view state. Coordinate links require no provider API credentials or runtime data fetch by the application.
 
+Coordinate presentation is separated from provider URL generation. A typed formatter derives decimal-degree, HMS/DMS, and colon-separated sexagesimal display/copy strings from the canonical decimal-degree catalog values, while each sky-map adapter always receives the untouched canonical coordinates.
+
 Maximum-distance input uses a responsive pending value and commits it on touch end, pointer release, keyboard release, or blur. Only the committed value filters the catalog and reconstructs the scene, bounding each continuous slider gesture to one graphics-resource turnover.
 
 The generated CNS5 artifact remains exactly 150 validated records. The application prepends a separately maintained Sun reference object for display, search, labels, and selection without passing it through the inverse-parallax catalog schema.

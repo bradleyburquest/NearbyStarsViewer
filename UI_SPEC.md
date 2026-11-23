@@ -87,7 +87,7 @@ Show available values in this order:
 
 1. Common name and primary catalog ID
 2. Distance in light-years and parsecs
-3. RA/declination with frame and epoch; make both coordinate values links to the selected default sky-map provider, centered on the system with a surrounding sky field; place a standard copy icon on the Dec row aligned to the right edge of the panel that copies `RA, Dec` in decimal degrees and reports success or failure accessibly
+3. RA/declination with frame and epoch; make both coordinate values links to the selected default sky-map provider, centered on the system with a surrounding sky field; on the Dec row place a coordinate-format selector immediately left of a copy icon aligned to the panel's right edge. Support decimal degrees, unit-labeled HMS/DMS, and colon-separated sexagesimal; the displayed and copied values follow the selection, and copy success or failure is reported accessibly.
 4. Spectral and luminosity class
 5. Apparent and absolute magnitude
 6. Estimated radius, mass, temperature, luminosity

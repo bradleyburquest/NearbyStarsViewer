@@ -54,7 +54,8 @@ Astronomy enthusiasts, students, educators, and casual learners can understand t
 - Highlight selection and show details.
 - Where available, show RA/declination and frame/epoch; distance; spectral/luminosity class; apparent/absolute magnitude; radius, mass, temperature, luminosity; proper motion; radial velocity; components; confirmed exoplanets; provenance; and uncertainty.
 - Link a selected non-solar system's RA and declination values to an external interactive sky map centered on those coordinates and showing the surrounding field.
-- Provide a Coordinates copy action that writes the selected system's RA and declination as comma-separated decimal degrees, with modern Clipboard API and local-HTTP fallback support.
+- Provide a Coordinates copy action that writes the selected system's RA and declination in the currently selected format, with modern Clipboard API and local-HTTP fallback support.
+- Let users display and copy coordinates as decimal degrees, HMS/DMS with unit labels, or colon-separated sexagesimal. Place the format selector immediately left of the right-aligned copy icon; sky-map provider URLs continue using their provider-required numeric representation.
 - Offer ESA Sky, Aladin Lite, NASA SkyView, and WorldWide Telescope as free coordinate-map providers; persist the user's default provider locally and encode non-default choices in shared view URLs.
 - Explain specialist terms and encodings accessibly.
 

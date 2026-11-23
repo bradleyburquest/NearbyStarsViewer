@@ -78,6 +78,14 @@ test('uses the release-ready viewer and selects a system', async ({ page }) => {
     'data-copied-coordinates',
     '219.92040813, -60.83514522',
   );
+  await page.getByLabel('Coordinate format').selectOption('sexagesimal-colon');
+  await expect(raSkyMapLink).toHaveText('RA 14:39:40.90');
+  await expect(decSkyMapLink).toHaveText('Dec -60:50:06.52');
+  await copyCoordinatesButton.click();
+  await expect(page.locator('html')).toHaveAttribute(
+    'data-copied-coordinates',
+    '14:39:40.90, -60:50:06.52',
+  );
   await page.getByLabel('Default star map').selectOption('nasa-skyview');
   await expect(raSkyMapLink).toHaveAttribute(
     'href',

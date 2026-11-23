@@ -909,6 +909,23 @@ h2 {
   gap: 8px;
 }
 
+.coordinate-actions {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.coordinate-format-select {
+  width: auto;
+  min-width: 104px;
+  min-height: 30px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  font-size: 0.78rem;
+}
+
 .coordinate-copy-button {
   display: inline-grid;
   width: 30px;
@@ -920,7 +937,6 @@ h2 {
   border-radius: 6px;
   color: #b9ddf3;
   background: #102639;
-  margin-left: auto;
   cursor: pointer;
 }
 
